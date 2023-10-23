@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { LayoutBuilderRoutingModule } from './layout-builder-routing.module';
 import { BuildFormComponent } from './build-form/build-form.component';
+import { DxButtonGroupModule, DxButtonModule, DxDataGridModule, DxFileUploaderModule } from 'devextreme-angular';
 
 
 @NgModule({
@@ -11,7 +12,11 @@ import { BuildFormComponent } from './build-form/build-form.component';
   ],
   imports: [
     CommonModule,
-    LayoutBuilderRoutingModule
+    LayoutBuilderRoutingModule,
+    DxButtonModule,
+    DxDataGridModule,
+    DxButtonGroupModule,
+    DxFileUploaderModule
   ]
 })
 export class LayoutBuilderModule { }
