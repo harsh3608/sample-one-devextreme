@@ -1,0 +1,487 @@
+{
+  "Objects": [
+    {
+      "ObjectName": "Employees",
+      "DisplayName": "Employees",
+      "primaryColumn": "id",
+      "id": 1
+    },
+    {
+      "ObjectName": "BrokerageAccount",
+      "DisplayName": "Brokerage Account",
+      "primaryColumn": "id",
+      "id": 2
+    },
+    {
+      "ObjectName": "Transaction",
+      "DisplayName": "Transaction",
+      "primaryColumn": "id",
+      "id": 3
+    }
+  ],
+  "Fields": [
+    {
+      "objectId": 1,
+      "fieldName": "Name",
+      "displayName": "Employee Name",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 1,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 1,
+      "fieldName": "id",
+      "displayName": "Employee Id",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": false,
+      "id": 2,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 1,
+      "fieldName": "BirthDate",
+      "displayName": "Birth Date",
+      "width": "auto",
+      "dataType": "date",
+      "format": "MM/DD/YYYY",
+      "isVisible": true,
+      "id": 3,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 1,
+      "fieldName": "Gender",
+      "displayName": "Gender",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 4,
+      "editorType": "dxSelectBox",
+      "editorOptions": {
+        "items": [
+          {
+            "display": "Male",
+            "value": "M"
+          },
+          {
+            "display": "Female",
+            "value": "F"
+          }
+        ],
+        "value": "M"
+      },
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "id",
+      "displayName": "id",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": false,
+      "id": 5,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "AccountNumber",
+      "displayName": "Account Number",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 6,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "StartDate",
+      "displayName": "Start Date",
+      "width": "auto",
+      "dataType": "date",
+      "format": "dd-mm-yyyy",
+      "isVisible": true,
+      "id": 7,
+      "editorType": "dxDateBox",
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "AccountType",
+      "displayName": "Account Type",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 8,
+      "editorType": "dxSelectBox",
+      "editorOptions": {
+        "items": [
+          {
+            "display": "IRA",
+            "value": "IRA"
+          },
+          {
+            "display": "CC",
+            "value": "CC"
+          }
+        ],
+        "value": ""
+      },
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "id",
+      "displayName": "id",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": false,
+      "id": 9,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "TransactionName",
+      "displayName": "Transaction Name",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 10,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": [
+        {
+          "type": "required",
+          "message": "Transaction Name is Required."
+        }
+      ]
+    },
+    {
+      "objectId": 3,
+      "fieldName": "TradeDate",
+      "displayName": "Trade Date",
+      "width": "auto",
+      "dataType": "date",
+      "format": "MM/DD/YYYY",
+      "isVisible": true,
+      "id": 11,
+      "editorType": "dxDateBox",
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "Type",
+      "displayName": "Transaction Type",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 12,
+      "editorType": "dxSelectBox",
+      "editorOptions": {
+        "items": [
+          {
+            "display": "Sell",
+            "value": "Sell"
+          },
+          {
+            "display": "Buy",
+            "value": "Buy"
+          }
+        ],
+        "value": "Buy"
+      },
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "Ticker",
+      "displayName": "Ticker",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 13,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "Quantity",
+      "displayName": "Quantity",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 14,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": [
+        {
+          "type": "range",
+          "message": "Quantity should be greater than zero.",
+          "min": 0
+        }
+      ]
+    },
+    {
+      "objectId": 3,
+      "fieldName": "CallPutIndicator",
+      "displayName": "Option Call Put Indicator",
+      "width": "auto",
+      "dataType": "boolean",
+      "format": null,
+      "isVisible": true,
+      "id": 14,
+      "editorType": "dxSelectBox",
+      "editorOptions": {
+        "items": [
+          {
+            "display": "",
+            "value": null
+          },
+          {
+            "display": "Call",
+            "value": 0
+          },
+          {
+            "display": "Put",
+            "value": 1
+          }
+        ],
+        "value": "Buy"
+      },
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "Files",
+      "displayName": "Files Upload",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 15,
+      "editorType": "dxFileUploader",
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "Files",
+      "displayName": "Files Upload",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 16,
+      "editorType": "dxFileUploader",
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 3,
+      "fieldName": "Demo",
+      "displayName": "Demo",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 17,
+      "editorType": "dxFileUploader",
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "Ticker",
+      "displayName": "Ticker",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 18,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "Ticker1",
+      "displayName": "Ticker1",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 19,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    },
+    {
+      "objectId": 2,
+      "fieldName": "Ticker2",
+      "displayName": "Ticker2",
+      "width": "auto",
+      "dataType": "string",
+      "format": null,
+      "isVisible": true,
+      "id": 20,
+      "editorType": null,
+      "editorOptions": {},
+      "validationOption": []
+    }
+  ],
+  "Employees": [
+    {
+      "Name": "Harshiv 1",
+      "BirthDate": "2023/09/06",
+      "id": "e1ac1905-ea22-4829-62be-01c9c13e4bb1",
+      "Gender": "M"
+    },
+    {
+      "Name": "Test",
+      "BirthDate": "2023/09/12",
+      "id": "769dfc04-ac56-5340-dd72-385a2f8eeeed",
+      "Gender": "M"
+    },
+    {
+      "Gender": "M",
+      "Name": "Harshiv 2",
+      "BirthDate": "2023/09/04",
+      "id": "5da63ccf-db78-9bf8-aea8-7d53c5dcc46e"
+    },
+    {
+      "Name": "Harshiv 3",
+      "BirthDate": "2023/08/29",
+      "Gender": "M",
+      "id": "18dfa83b-78df-dc4a-c68e-15d5f5b820cf"
+    },
+    {
+      "Name": "Test 1",
+      "BirthDate": "2000/11/11",
+      "Gender": "F",
+      "id": "eced3e1e-8445-d0f3-7928-a20e7afe4211"
+    },
+    {
+      "Name": "Test 2",
+      "BirthDate": "2022/10/01",
+      "Gender": "F",
+      "id": "7874c9d3-5dbf-344c-3491-23e055b85351"
+    }
+  ],
+  "Transaction": [
+    {
+      "TransactionName": "Apple Inc.",
+      "TradeDate": "2023-10-01T18:30:00.000Z",
+      "Type": "Buy",
+      "id": "5d1dfc8e-3cb4-a8fc-3cea-936a2a1185a8",
+      "CallPutIndicator": 0,
+      "Quantity": "10",
+      "Ticker": "AAPL"
+    },
+    {
+      "Ticker": "VUG",
+      "TransactionName": "Vanguard Growth ",
+      "Type": "Buy",
+      "TradeDate": "2023-10-05T18:30:00.000Z",
+      "Quantity": "500",
+      "id": "3b4a21a8-3f62-bad5-bb60-a1a734e218a6",
+      "demofile": {
+        "FileBase64": "data:text/plain;base64,RWxlY3Ryb25pYyBGZWVkIA0KRGFpbHkgSm9iIA0KV29ya0Zsb3cNCg0KRmVlZCBTY2hlZHVsZXIgQWdlbnQ6IA0KICogaWYgdGltZSB0byBydW4gdGhlIGJyb2tlciBtYXRjaCB3aXRoIGN1cnJlbnQgdGltZS4NCgl0aGVuDQoJRW5xdWV1ZSBGZWVkIFByb2Nlc3MgQWdlbnQgdG8gcnVuIGZvciB0aGUgcGVydGljdWxlciBicm9rZXIgDQoJZWxzZSANCglub3RoaW5nIA0KDQoNCkZlZWQgcHJvY2VzcyBBZ2VudDoNCiogQ2hlY2sgSWYgaWYgdGhlcmUgYW55IHF1ZXVlZCBwcm9jZXNzIGZvciBGZWVkIFByb2Nlc3MgQWdlbnQNCiAtIGlmIG5vIHRoZW4gDQoJRG8gbm90aGluZyANCiAtIGVsc2UNCglnZXQgbWFwcGVkIGZpbGUgbGlzdCANCgktIChsb29wKSAgcGljayBicm9rZXIgZmlsZSBvbmUgYnkgb25lIC4NCgkJKiBpZiB3ZSBoYXZlIHJlY2VpdmVkIGFsbCByZXF1aXJlZCBmaWxlIGZyb20gYnJva2VyIA0KCQktIHRoZW4gDQoJCQl3ZSB3aWxsIHJlYWQgdGhlIGZpbGUgb25lIGJ5IG9uZSBhbmQgSW5zZXJ0IHRoZSBkYXRhIGFzIGl0IGlzIGludG8gdGhlIHN0YWdpbmcgdGFibGUgYXMgcGVyIG91ciBtYXBwaW5nIG9mIHRoZSBmaWVsZC4NCgkJCQ0KCSAJLSBlbHNlDQoJCQlNYXJrIFByb2Nlc3MgYW5kIE1pc3NpbmcgRmlsZQ0KCQ0KCS0gc3luYyBhbGwgd29ya3NwYWNlIGRhdGFiYXNlIHNlbGVjdGVkIHRhYmxlcyB0aHJvdWdoIEV4cG9ydCBBZ2VudC4NCg0KCS0gRmlsdGVyIFRoZSBEYXRhIChsaWtlIG5vdCByZXBvcnRhYmxlIG9yIG5vdCBhY3RpdmUgYWNjb3VudCBkYXRhIHNob3VsZCBub3QgcHJvY2VzcykNCgktIFRyYW5zbGF0ZSBUaGUgRGF0YQ0KCS0gRGF0YSBQcm9jZXNzaW5nIGFzIHBlciBydWxlIHNldCAobGlrZSBJZ25vcmUgdGhlIFRyYW5zYWN0aW9uIGFuZCBIb2xkaW5nIG9mIFNlY3VyaXR5IFR5cGUgQSkNCgktIFByb2Nlc3NlZCBEYXRhIGFyZSBtb3ZlZCB0byB0aGUgUmVsYXRpdml0eSBEYXRhIENlbnRlcihSREMpDQoNCkRhdGEgRXhwb3J0IEFnZW50OiBBZ2VudCB3aGljaCBzeW5jIHNvbWUgcmVxdWlyZWQgZGF0YSBmcm9tIFJlbGF0aXZpdHkgdG8gb3VyIGRhdGFiYXNlIHdoaWNoIGhlbHAgdXMgdG8gd2hpbGUgcHJvY2Vzc2luZyB0aGUgZGF0YQ0KDQoJCQ0KDQoNCmhyOF81WWI2I2dkbVE3a3cNCgkNCg0KDQoNCg0KDQogDQoNCg0KDQo=",
+        "FileName": "1.txt",
+        "Type": "text/plain"
+      },
+      "Files": {
+        "FileBase64": "data:text/plain;base64,RWxlY3Ryb25pYyBGZWVkIA0KRGFpbHkgSm9iIA0KV29ya0Zsb3cNCg0KRmVlZCBTY2hlZHVsZXIgQWdlbnQ6IA0KICogaWYgdGltZSB0byBydW4gdGhlIGJyb2tlciBtYXRjaCB3aXRoIGN1cnJlbnQgdGltZS4NCgl0aGVuDQoJRW5xdWV1ZSBGZWVkIFByb2Nlc3MgQWdlbnQgdG8gcnVuIGZvciB0aGUgcGVydGljdWxlciBicm9rZXIgDQoJZWxzZSANCglub3RoaW5nIA0KDQoNCkZlZWQgcHJvY2VzcyBBZ2VudDoNCiogQ2hlY2sgSWYgaWYgdGhlcmUgYW55IHF1ZXVlZCBwcm9jZXNzIGZvciBGZWVkIFByb2Nlc3MgQWdlbnQNCiAtIGlmIG5vIHRoZW4gDQoJRG8gbm90aGluZyANCiAtIGVsc2UNCglnZXQgbWFwcGVkIGZpbGUgbGlzdCANCgktIChsb29wKSAgcGljayBicm9rZXIgZmlsZSBvbmUgYnkgb25lIC4NCgkJKiBpZiB3ZSBoYXZlIHJlY2VpdmVkIGFsbCByZXF1aXJlZCBmaWxlIGZyb20gYnJva2VyIA0KCQktIHRoZW4gDQoJCQl3ZSB3aWxsIHJlYWQgdGhlIGZpbGUgb25lIGJ5IG9uZSBhbmQgSW5zZXJ0IHRoZSBkYXRhIGFzIGl0IGlzIGludG8gdGhlIHN0YWdpbmcgdGFibGUgYXMgcGVyIG91ciBtYXBwaW5nIG9mIHRoZSBmaWVsZC4NCgkJCQ0KCSAJLSBlbHNlDQoJCQlNYXJrIFByb2Nlc3MgYW5kIE1pc3NpbmcgRmlsZQ0KCQ0KCS0gc3luYyBhbGwgd29ya3NwYWNlIGRhdGFiYXNlIHNlbGVjdGVkIHRhYmxlcyB0aHJvdWdoIEV4cG9ydCBBZ2VudC4NCg0KCS0gRmlsdGVyIFRoZSBEYXRhIChsaWtlIG5vdCByZXBvcnRhYmxlIG9yIG5vdCBhY3RpdmUgYWNjb3VudCBkYXRhIHNob3VsZCBub3QgcHJvY2VzcykNCgktIFRyYW5zbGF0ZSBUaGUgRGF0YQ0KCS0gRGF0YSBQcm9jZXNzaW5nIGFzIHBlciBydWxlIHNldCAobGlrZSBJZ25vcmUgdGhlIFRyYW5zYWN0aW9uIGFuZCBIb2xkaW5nIG9mIFNlY3VyaXR5IFR5cGUgQSkNCgktIFByb2Nlc3NlZCBEYXRhIGFyZSBtb3ZlZCB0byB0aGUgUmVsYXRpdml0eSBEYXRhIENlbnRlcihSREMpDQoNCkRhdGEgRXhwb3J0IEFnZW50OiBBZ2VudCB3aGljaCBzeW5jIHNvbWUgcmVxdWlyZWQgZGF0YSBmcm9tIFJlbGF0aXZpdHkgdG8gb3VyIGRhdGFiYXNlIHdoaWNoIGhlbHAgdXMgdG8gd2hpbGUgcHJvY2Vzc2luZyB0aGUgZGF0YQ0KDQoJCQ0KDQoNCmhyOF81WWI2I2dkbVE3a3cNCgkNCg0KDQoNCg0KDQogDQoNCg0KDQo=",
+        "FileName": "1.txt",
+        "Type": "text/plain"
+      }
+    },
+    {
+      "Ticker": "DIS",
+      "TradeDate": "2023-09-30T18:30:00.000Z",
+      "TransactionName": "DISNEY WALT CO",
+      "CallPutIndicator": null,
+      "Quantity": "1000",
+      "Type": "Sell",
+      "id": "c2cc1aca-218d-1841-c778-54736ed98949",
+      "Files": {
+        "FileBase64": "data:text/plain;base64,RWxlY3Ryb25pYyBGZWVkIA0KRGFpbHkgSm9iIA0KV29ya0Zsb3cNCg0KRmVlZCBTY2hlZHVsZXIgQWdlbnQ6IA0KICogaWYgdGltZSB0byBydW4gdGhlIGJyb2tlciBtYXRjaCB3aXRoIGN1cnJlbnQgdGltZS4NCgl0aGVuDQoJRW5xdWV1ZSBGZWVkIFByb2Nlc3MgQWdlbnQgdG8gcnVuIGZvciB0aGUgcGVydGljdWxlciBicm9rZXIgDQoJZWxzZSANCglub3RoaW5nIA0KDQoNCkZlZWQgcHJvY2VzcyBBZ2VudDoNCiogQ2hlY2sgSWYgaWYgdGhlcmUgYW55IHF1ZXVlZCBwcm9jZXNzIGZvciBGZWVkIFByb2Nlc3MgQWdlbnQNCiAtIGlmIG5vIHRoZW4gDQoJRG8gbm90aGluZyANCiAtIGVsc2UNCglnZXQgbWFwcGVkIGZpbGUgbGlzdCANCgktIChsb29wKSAgcGljayBicm9rZXIgZmlsZSBvbmUgYnkgb25lIC4NCgkJKiBpZiB3ZSBoYXZlIHJlY2VpdmVkIGFsbCByZXF1aXJlZCBmaWxlIGZyb20gYnJva2VyIA0KCQktIHRoZW4gDQoJCQl3ZSB3aWxsIHJlYWQgdGhlIGZpbGUgb25lIGJ5IG9uZSBhbmQgSW5zZXJ0IHRoZSBkYXRhIGFzIGl0IGlzIGludG8gdGhlIHN0YWdpbmcgdGFibGUgYXMgcGVyIG91ciBtYXBwaW5nIG9mIHRoZSBmaWVsZC4NCgkJCQ0KCSAJLSBlbHNlDQoJCQlNYXJrIFByb2Nlc3MgYW5kIE1pc3NpbmcgRmlsZQ0KCQ0KCS0gc3luYyBhbGwgd29ya3NwYWNlIGRhdGFiYXNlIHNlbGVjdGVkIHRhYmxlcyB0aHJvdWdoIEV4cG9ydCBBZ2VudC4NCg0KCS0gRmlsdGVyIFRoZSBEYXRhIChsaWtlIG5vdCByZXBvcnRhYmxlIG9yIG5vdCBhY3RpdmUgYWNjb3VudCBkYXRhIHNob3VsZCBub3QgcHJvY2VzcykNCgktIFRyYW5zbGF0ZSBUaGUgRGF0YQ0KCS0gRGF0YSBQcm9jZXNzaW5nIGFzIHBlciBydWxlIHNldCAobGlrZSBJZ25vcmUgdGhlIFRyYW5zYWN0aW9uIGFuZCBIb2xkaW5nIG9mIFNlY3VyaXR5IFR5cGUgQSkNCgktIFByb2Nlc3NlZCBEYXRhIGFyZSBtb3ZlZCB0byB0aGUgUmVsYXRpdml0eSBEYXRhIENlbnRlcihSREMpDQoNCkRhdGEgRXhwb3J0IEFnZW50OiBBZ2VudCB3aGljaCBzeW5jIHNvbWUgcmVxdWlyZWQgZGF0YSBmcm9tIFJlbGF0aXZpdHkgdG8gb3VyIGRhdGFiYXNlIHdoaWNoIGhlbHAgdXMgdG8gd2hpbGUgcHJvY2Vzc2luZyB0aGUgZGF0YQ0KDQoJCQ0KDQoNCmhyOF81WWI2I2dkbVE3a3cNCgkNCg0KDQoNCg0KDQogDQoNCg0KDQo=",
+        "FileName": "1.txt",
+        "Type": "text/plain"
+      }
+    },
+    {
+      "Ticker": "FXAIX",
+      "TransactionName": "Fidelity 500 Index Fund",
+      "Type": "Sell",
+      "Quantity": "1000",
+      "TradeDate": "2023-10-02T18:30:00.000Z",
+      "id": "bae93abb-ea98-9863-4dcb-adcdbb2d3ff6",
+      "Files": {
+        "FileBase64": "data:text/plain;base64,RWxlY3Ryb25pYyBGZWVkIA0KRGFpbHkgSm9iIA0KV29ya0Zsb3cNCg0KRmVlZCBTY2hlZHVsZXIgQWdlbnQ6IA0KICogaWYgdGltZSB0byBydW4gdGhlIGJyb2tlciBtYXRjaCB3aXRoIGN1cnJlbnQgdGltZS4NCgl0aGVuDQoJRW5xdWV1ZSBGZWVkIFByb2Nlc3MgQWdlbnQgdG8gcnVuIGZvciB0aGUgcGVydGljdWxlciBicm9rZXIgDQoJZWxzZSANCglub3RoaW5nIA0KDQoNCkZlZWQgcHJvY2VzcyBBZ2VudDoNCiogQ2hlY2sgSWYgaWYgdGhlcmUgYW55IHF1ZXVlZCBwcm9jZXNzIGZvciBGZWVkIFByb2Nlc3MgQWdlbnQNCiAtIGlmIG5vIHRoZW4gDQoJRG8gbm90aGluZyANCiAtIGVsc2UNCglnZXQgbWFwcGVkIGZpbGUgbGlzdCANCgktIChsb29wKSAgcGljayBicm9rZXIgZmlsZSBvbmUgYnkgb25lIC4NCgkJKiBpZiB3ZSBoYXZlIHJlY2VpdmVkIGFsbCByZXF1aXJlZCBmaWxlIGZyb20gYnJva2VyIA0KCQktIHRoZW4gDQoJCQl3ZSB3aWxsIHJlYWQgdGhlIGZpbGUgb25lIGJ5IG9uZSBhbmQgSW5zZXJ0IHRoZSBkYXRhIGFzIGl0IGlzIGludG8gdGhlIHN0YWdpbmcgdGFibGUgYXMgcGVyIG91ciBtYXBwaW5nIG9mIHRoZSBmaWVsZC4NCgkJCQ0KCSAJLSBlbHNlDQoJCQlNYXJrIFByb2Nlc3MgYW5kIE1pc3NpbmcgRmlsZQ0KCQ0KCS0gc3luYyBhbGwgd29ya3NwYWNlIGRhdGFiYXNlIHNlbGVjdGVkIHRhYmxlcyB0aHJvdWdoIEV4cG9ydCBBZ2VudC4NCg0KCS0gRmlsdGVyIFRoZSBEYXRhIChsaWtlIG5vdCByZXBvcnRhYmxlIG9yIG5vdCBhY3RpdmUgYWNjb3VudCBkYXRhIHNob3VsZCBub3QgcHJvY2VzcykNCgktIFRyYW5zbGF0ZSBUaGUgRGF0YQ0KCS0gRGF0YSBQcm9jZXNzaW5nIGFzIHBlciBydWxlIHNldCAobGlrZSBJZ25vcmUgdGhlIFRyYW5zYWN0aW9uIGFuZCBIb2xkaW5nIG9mIFNlY3VyaXR5IFR5cGUgQSkNCgktIFByb2Nlc3NlZCBEYXRhIGFyZSBtb3ZlZCB0byB0aGUgUmVsYXRpdml0eSBEYXRhIENlbnRlcihSREMpDQoNCkRhdGEgRXhwb3J0IEFnZW50OiBBZ2VudCB3aGljaCBzeW5jIHNvbWUgcmVxdWlyZWQgZGF0YSBmcm9tIFJlbGF0aXZpdHkgdG8gb3VyIGRhdGFiYXNlIHdoaWNoIGhlbHAgdXMgdG8gd2hpbGUgcHJvY2Vzc2luZyB0aGUgZGF0YQ0KDQoJCQ0KDQoNCmhyOF81WWI2I2dkbVE3a3cNCgkNCg0KDQoNCg0KDQogDQoNCg0KDQo=",
+        "FileName": "1.txt",
+        "Type": "text/plain"
+      }
+    },
+    {
+      "TransactionName": "Apple Inc.",
+      "TradeDate": "2023-10-04T18:30:00.000Z",
+      "Type": "Sell",
+      "Ticker": "AAPL",
+      "Quantity": "1000",
+      "CallPutIndicator": 1,
+      "id": "9efedc93-594a-9f3f-519d-1ce21e24efe6"
+    }
+  ],
+  "BrokerageAccount": [
+    {
+      "AccountType": "IRA",
+      "AccountNumber": "00001111",
+      "StartDate": "2023-09-05T18:30:00.000Z",
+      "id": "84ed506c-bb54-311d-ccb4-f23c977fd8b9",
+      "Files": {
+        "FileBase64": "data:image/png;base64,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",
+        "FileName": "IB issue.png",
+        "Type": "image/png"
+      },
+      "Ticker": "sasa",
+      "Ticker1": "wqwq",
+      "Ticker2": "20"
+    },
+    {
+      "AccountNumber": "qwqwq",
+      "StartDate": "2023-09-30T18:30:00.000Z",
+      "AccountType": "IRA",
+      "Ticker": "wqwq",
+      "Ticker1": "wqwqw",
+      "id": "b34e2066-8208-94ae-2ae6-1d3ca5347bbd"
+    }
+  ]
+}
