@@ -11,6 +11,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^16.0.0",
+    "@angular/cdk": "^16.2.8",
     "@angular/common": "^16.0.0",
     "@angular/compiler": "^16.0.0",
     "@angular/core": "^16.0.0",
@@ -22,6 +23,9 @@
     "devextreme": "^23.1.5",
     "devextreme-angular": "^23.1.5",
     "devextreme-aspnet-data-nojquery": "^3.0.0",
+    "exceljs": "^4.3.0",
+    "file-saver": "^2.0.5",
+    "guid-typescript": "^1.0.9",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"

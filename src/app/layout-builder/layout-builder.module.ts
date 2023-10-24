@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { LayoutBuilderRoutingModule } from './layout-builder-routing.module';
 import { BuildFormComponent } from './build-form/build-form.component';
-import { DxButtonGroupModule, DxButtonModule, DxDataGridModule, DxFileUploaderModule } from 'devextreme-angular';
+import { DevExtremeModule, DxButtonGroupModule, DxButtonModule, DxDataGridModule, DxFileUploaderModule, DxTextBoxModule } from 'devextreme-angular';
+import { OverlayModule } from '@angular/cdk/overlay';
 
 
 @NgModule({
@@ -16,7 +17,10 @@ import { DxButtonGroupModule, DxButtonModule, DxDataGridModule, DxFileUploaderMo
     DxButtonModule,
     DxDataGridModule,
     DxButtonGroupModule,
-    DxFileUploaderModule
+    DxFileUploaderModule,
+    DevExtremeModule,
+    DxTextBoxModule,
+    OverlayModule
   ]
 })
 export class LayoutBuilderModule { }

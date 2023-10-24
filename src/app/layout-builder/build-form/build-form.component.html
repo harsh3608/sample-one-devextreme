@@ -1,1 +1,37 @@
-<p>build-form works!</p>
+
+<div class="container-fluid">
+    <div class="row">
+        <div>
+            <button class="btn btn-primary" (click)="submit()">submit</button>
+            <button class="btn btn-primary" (click)="createLayout()">Add Layout</button>
+        </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-8" >
+            <div class="card vh-100"  (dragover)="onDragOverList($event)" (dragenter)="onDragEnter($event)" (dragexit)="onDragExit($event)">
+                <div class="card-body" >
+                    <div class="row"  #componentBody></div>
+                    <!-- <div class="drop-zone col-xl-6"  *ngIf="isDragOver">Drop here</div> -->
+                </div>
+            </div>
+      </div>
+      <div class="col-md-4">
+            <div class="card vh-100">
+                <div class="card-body">
+                    <div class="task" [ngClass]="{'disabled': !item.draggable}" [draggable]="item.draggable"  (dragstart)="onDragStart(item)" (dragend)="onDragEnd($event)" *ngFor="let item of fields" >{{item.displayName}}</div>
+                </div>
+            </div>
+      </div>
+    </div>
+</div>
+
+
+<ng-template #userMenu let-user>
+    <section class="user-menu p-2 ">
+        <dx-form  [formData]="currentLayoutData" formoptions="{repaintChangesOnly: true}" >
+            <dxi-item dataField="LayoutName"></dxi-item>
+        </dx-form>
+        <dx-button text="Save" (click)="updateLayoutName(user,currentLayoutData)"></dx-button>
+    </section>
+</ng-template>
