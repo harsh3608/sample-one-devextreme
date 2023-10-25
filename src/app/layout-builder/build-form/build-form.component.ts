@@ -6,7 +6,7 @@ import dxFileUploader from 'devextreme/ui/file_uploader';
 import dxSelectBox from 'devextreme/ui/select_box';
 import dxTextBox from 'devextreme/ui/text_box';
 import { Guid } from 'guid-typescript';
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayOutsideClickDispatcher, OverlayRef } from '@angular/cdk/overlay';
 import { Subscription, filter, fromEvent, take } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { DevDataGridService, Fields, Layout, Layouts, editorType } from '../shared/services/dev-data-grid.service';
@@ -146,24 +146,24 @@ export class BuildFormComponent {
     }
   }
 
-  
+
   DropComponent(event: any, index: string, isReplace: boolean = false) {
     let options = {
       placeHolder: this.currentItem.displayName,
       label: this.currentItem.displayName,
     };
-  
+
     const newComponentElement = document.createElement("div");
-  
+
     // Create a wrapper div for the label and input element
     //const wrapper = document.createElement("div");
     newComponentElement.style.display = "flex"; // Use flex layout to align label and input horizontally
-    //newComponentElement.appendChild(wrapper);
-  
+    //newComponentElement.style.border = "light";
+
     const label = document.createElement("label");
     label.innerText = `${this.currentItem.displayName} : `;
     newComponentElement.appendChild(label);
-  
+
     const wrapper = document.createElement("div");
 
     if (this.currentItem.editorType == editorType[editorType.dxSelectBox]) {
@@ -184,7 +184,7 @@ export class BuildFormComponent {
     } else if (this.currentItem.editorType == editorType[editorType.dxDateBox]) {
       new dxDateBox(wrapper, {});
     }
-  
+
     newComponentElement.appendChild(wrapper);
 
     const getMainDiv = this.getMainDiv(index);
@@ -194,12 +194,12 @@ export class BuildFormComponent {
       icon: "close",
       onClick: (event) => this.removeElemnt(event, createMainDiv, index),
     });
-  
+
     newComponentElement.appendChild(btn);
 
     createMainDiv.appendChild(newComponentElement);
     //createMainDiv.appendChild(btn);
-  
+
     return { elementRef: createMainDiv, options: options, field: getMainDiv.field };
   }
 
@@ -245,6 +245,7 @@ export class BuildFormComponent {
     const createMainDiv = document.createElement("div");
     createMainDiv.className = "col-xl-6 mb-3"
     createMainDiv.innerHTML = "Drop Here";
+    //createMainDiv.style.border = "dashed";
     createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
     return createMainDiv
   }
@@ -261,7 +262,6 @@ export class BuildFormComponent {
     elementRef.className = "col-xl-6 mb-3"
     elementRef.innerHTML = "Drop Here";
     elementRef.ondrop = (event: any) => this.onDropComponent(event, index);
-
     const layout = { elementRef: elementRef, isField: false, option: {}, id: index, fields: {} as Fields } as Layout;
     this.updateLayout(layout, index)
     // elementRef.remove();
@@ -340,7 +340,7 @@ export class BuildFormComponent {
 
     const createLayoutDiv = document.createElement("div");
     createLayoutDiv.className = "col-xl-12 mb-1 card p-1 h-120px"
-    let layout = { elementRef: createLayoutDiv, id: id, layoutName: "" } as Layouts
+    let layout = { elementRef: createLayoutDiv, id: id, layoutName: "Category" } as Layouts
 
 
     const cardbody = document.createElement("div");
@@ -350,6 +350,12 @@ export class BuildFormComponent {
     cardTitle.id = "card-title-" + id;
     cardbody.appendChild(cardTitle);
 
+    // const button = document.createElement("div");
+    // new dxButton(button, {
+    //   icon: 'overflow',
+    //   onClick: (event) => this.open(event, layout)
+    // });
+    // createLayoutDiv.appendChild(button);
 
     const div = document.createElement("div");
     div.className = "row";
@@ -380,10 +386,13 @@ export class BuildFormComponent {
   }
 
   open({ x, y }: MouseEvent, e: any, layout: Layouts) {
+    //  open(clickEvent: any, layout: Layouts) {
+
     this.close();
-    e.preventDefault();
+    //e.preventDefault();
     this.currentLayoutData.LayoutName = layout.layoutName;
     console.log(layout);
+    //const { clientX: x, clientY: y } = clickEvent;
     const positionStrategy = this.overlay.position()
       .flexibleConnectedTo({ x, y })
       .withPositions([
@@ -413,6 +422,7 @@ export class BuildFormComponent {
         take(1)
       ).subscribe(() => this.close())
   }
+
   close() {
     this.sub && this.sub.unsubscribe();
     if (this.overlayRef) {
@@ -436,10 +446,10 @@ export class BuildFormComponent {
     }
   }
 
-  onValueChanged(e: any) {
-    this.enteredValue = e.value;
-    this.currentLayoutData.LayoutName = this.enteredValue;
-  }
+  // onValueChanged(e: any) {
+  //   this.enteredValue = e.value;
+  //   this.currentLayoutData.LayoutName = this.enteredValue;
+  // }
 
 
 }
