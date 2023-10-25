@@ -70,6 +70,7 @@ export class BuildFormComponent {
   isDragOver = false;
 
   onDrop(event: any, id: string) {
+    debugger;
     let element = event.srcElement;
 
     if (element.hasChildNodes()) {
@@ -204,11 +205,9 @@ export class BuildFormComponent {
   }
 
   createComponent(event: any, index: string) {
-
     const createMainDiv = document.createElement("div");
     createMainDiv.className = "col-xl-6 mb-3"
     createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
-
 
     const newComponentElement = document.createElement("div");
     new dxTextBox(newComponentElement, {
@@ -224,14 +223,6 @@ export class BuildFormComponent {
     });
     createMainDiv.appendChild(btn);
 
-    // const expandbtn = document.createElement("div")
-    // new dxButton(expandbtn,{
-    //   icon: 'chevronnext',
-    //   onClick:(event)=> this.expandElement(event,createMainDiv,index)
-    // });
-    // createMainDiv.appendChild(expandbtn);
-
-
     this.componentBody.nativeElement.appendChild(createMainDiv);
 
     return createMainDiv
@@ -243,9 +234,11 @@ export class BuildFormComponent {
 
   getDropingAreaElement(event: any, index: string) {
     const createMainDiv = document.createElement("div");
+    const child = document.createElement("div");
     createMainDiv.className = "col-xl-6 mb-3"
-    createMainDiv.innerHTML = "Drop Here";
-    //createMainDiv.style.border = "dashed";
+    child.innerHTML = "Drop Here";
+    child.style.border = "dashed";
+    createMainDiv.appendChild(child);
     createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
     return createMainDiv
   }
@@ -259,8 +252,11 @@ export class BuildFormComponent {
     while (elementRef.firstChild) {
       elementRef.removeChild(elementRef.firstChild);
     }
-    elementRef.className = "col-xl-6 mb-3"
-    elementRef.innerHTML = "Drop Here";
+    elementRef.className = "col-xl-6 mb-3";
+    const child = document.createElement("div");
+    child.style.border = 'dashed';
+    child.innerHTML = "Drop Here";
+    elementRef.appendChild(child);
     elementRef.ondrop = (event: any) => this.onDropComponent(event, index);
     const layout = { elementRef: elementRef, isField: false, option: {}, id: index, fields: {} as Fields } as Layout;
     this.updateLayout(layout, index)
@@ -313,6 +309,7 @@ export class BuildFormComponent {
     console.log("onDragEnd");
     this.isDragOver = false;
     this.currentItem = {} as Fields;
+
   }
   onDragOverList(event: any) {
     event.preventDefault();
@@ -342,6 +339,9 @@ export class BuildFormComponent {
     createLayoutDiv.className = "col-xl-12 mb-1 card p-1 h-120px"
     let layout = { elementRef: createLayoutDiv, id: id, layoutName: "Category" } as Layouts
 
+    const head = document.createElement("div");
+    head.className = "d-flex flex-row justify-content-between";
+
 
     const cardbody = document.createElement("div");
     cardbody.className = "card-body";
@@ -349,26 +349,32 @@ export class BuildFormComponent {
     cardTitle.className = "card-title";
     cardTitle.id = "card-title-" + id;
     cardbody.appendChild(cardTitle);
+    head.appendChild(cardTitle);
 
-    // const button = document.createElement("div");
-    // new dxButton(button, {
-    //   icon: 'overflow',
-    //   onClick: (event) => this.open(event, layout)
-    // });
-    // createLayoutDiv.appendChild(button);
+
+    const button = document.createElement("div");
+    new dxButton(button, {
+      icon: 'overflow',
+      onClick: (event) => this.open(event, layout),
+      type:"normal",
+      stylingMode:"outlined",
+    });
+    //createLayoutDiv.appendChild(button);
+    head.appendChild(button);
 
     const div = document.createElement("div");
     div.className = "row";
     div.id = "insert-div-" + id;
     cardbody.appendChild(div);
 
+    createLayoutDiv.appendChild(head);
     createLayoutDiv.appendChild(cardbody);
 
     createLayoutDiv.ondragover = (event) => this.onDragOverList(event);
     createLayoutDiv.ondrop = (event) => this.onDrop(event, id);
     createLayoutDiv.ondragenter = (event) => this.onDragEnter(event);
     createLayoutDiv.ondragleave = (event) => this.onDragExit(event);
-    createLayoutDiv.oncontextmenu = (event) => this.open(event, event, layout);
+    //createLayoutDiv.oncontextmenu = (event) => this.open(event, event, layout);
 
     this.componentBody.nativeElement.appendChild(createLayoutDiv);
     this.layout.push(layout);
@@ -378,23 +384,29 @@ export class BuildFormComponent {
   submit() {
     console.log(this.layoutArray);
   }
+
   draggable(status: boolean, id: string) {
-    let item = this.fields?.find((item) => item.id == id)
-    if (item) {
-      item.draggable = status;
-    }
+    this.fields = this.fields.filter(x => x.id !== id);
+    // let item = this.fields?.find((item) => item.id == id)
+    // if (item) {
+    //   item.draggable = status;
+    // }
   }
 
-  open({ x, y }: MouseEvent, e: any, layout: Layouts) {
-    //  open(clickEvent: any, layout: Layouts) {
-
+  //open({ x, y }: MouseEvent, e: any, layout: Layouts) {
+  open(clickEvent: any, layout: Layouts) {
+    debugger;
     this.close();
-    //e.preventDefault();
+    // clickEvent.preventDefault();
     this.currentLayoutData.LayoutName = layout.layoutName;
     console.log(layout);
-    //const { clientX: x, clientY: y } = clickEvent;
+
+    // Calculate the center of the screen
+    const centerX = 850;
+    const centerY = 300;
+
     const positionStrategy = this.overlay.position()
-      .flexibleConnectedTo({ x, y })
+      .flexibleConnectedTo({ x: centerX, y: centerY })
       .withPositions([
         {
           originX: 'end',
@@ -420,7 +432,7 @@ export class BuildFormComponent {
           return !!this.overlayRef && !this.overlayRef.overlayElement.contains(clickTarget);
         }),
         take(1)
-      ).subscribe(() => this.close())
+      ).subscribe({})
   }
 
   close() {

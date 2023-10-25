@@ -4,7 +4,7 @@
             <!-- <div class="px-2">
                 <dx-text-box [value]="enteredValue" (onValueChanged)="onValueChanged($event)"></dx-text-box>
             </div> -->
-            
+
             <div class="px-2">
                 <button class="btn btn-primary" (click)="submit()">submit</button>
             </div>
@@ -44,6 +44,13 @@
         <dx-form [formData]="currentLayoutData" formoptions="{repaintChangesOnly: true}">
             <dxi-item dataField="LayoutName"></dxi-item>
         </dx-form>
-        <dx-button text="Save" (click)="updateLayoutName(user,currentLayoutData)"></dx-button>
+        <div class="d-flex flex-row justify-content-between p-2">
+            <div>
+                <dx-button text="Save" type="default" (click)="updateLayoutName(user,currentLayoutData)"></dx-button>
+            </div>
+            <div>
+                <dx-button text="Close" type="danger" (click)="close()"></dx-button>
+            </div>
+        </div>
     </section>
 </ng-template>
