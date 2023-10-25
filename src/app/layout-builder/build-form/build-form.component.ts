@@ -19,8 +19,8 @@ import { DevDataGridService, Fields, Layout, Layouts, editorType } from '../shar
 export class BuildFormComponent {
   @ViewChild('componentBody') public componentBody!: ElementRef;
   @ViewChild('userMenu') userMenu!: TemplateRef<any>;
-  fields! : Fields[];
-  currentItem!:Fields;
+  fields!: Fields[];
+  currentItem!: Fields;
   overlayRef!: OverlayRef | null;
   sub!: Subscription;
   currentLayoutData = {
@@ -31,178 +31,196 @@ export class BuildFormComponent {
     { dataField: 'LayoutName' }
   ];
 
+  enteredValue: string = 'Default Layout';
 
-  constructor(private service:DevDataGridService,public overlay: Overlay,    public viewContainerRef: ViewContainerRef,private elementRef: ElementRef){
-    this.service.getObjectField(3).subscribe((result)=>{
-      this.fields=result.map((e:Fields)=>{e.draggable=true; return e;});
+
+  constructor(private service: DevDataGridService, public overlay: Overlay, public viewContainerRef: ViewContainerRef, private elementRef: ElementRef) {
+    this.service.getObjectField(3).subscribe((result) => {
+      this.fields = result.map((e: Fields) => { e.draggable = true; return e; });
     })
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.createLayout()
   }
 
-  layout:Layouts[] = [];
+  layout: Layouts[] = [];
 
-  componentArray :any = [
+  componentArray: any = [
     {
-      id:1, 
-      name:"textBox",
-      type:"string"
+      id: 1,
+      name: "textBox",
+      type: "string"
     },
     {
-      id:2, 
-      name:"dateTime",
-      type:"date"
+      id: 2,
+      name: "dateTime",
+      type: "date"
     },
     {
-      id:3, 
-      name:"number",
-      type:"number"
+      id: 3,
+      name: "number",
+      type: "number"
     }
 
   ];
-  layoutArray : Layout[] = [
-    
-  ];
-  isDragOver = false; 
+  layoutArray: Layout[] = [
 
-  onDrop(event:any,id:string){
+  ];
+  isDragOver = false;
+
+  onDrop(event: any, id: string) {
     let element = event.srcElement;
 
-    if(element.hasChildNodes()){
-      element = element.querySelector("#"+"insert-div-"+id)
+    if (element.hasChildNodes()) {
+      element = element.querySelector("#" + "insert-div-" + id)
     }
 
     console.log("onDrop");
     this.isDragOver = false;
     var index = Guid.create().toString();
 
-    const divRef=this.DropComponent(event,index);
+    const divRef = this.DropComponent(event, index);
     this.layoutArray.push({
-      layoutId:id,
-      elementRef:divRef.elementRef,
-      isField:true,
-      id:index,
-      option:divRef.options,
-      fields:divRef.field
+      layoutId: id,
+      elementRef: divRef.elementRef,
+      isField: true,
+      id: index,
+      option: divRef.options,
+      fields: divRef.field
     })
     // this.componentBody.nativeElement.appendChild(divRef.elementRef);
     element.appendChild(divRef.elementRef);
-    
-    var dropableIndex = Guid.create().toString();
-    const dropableDivRef=this.createDropingArea(event,dropableIndex)
-    this.layoutArray.push({
-      layoutId:id,
-      elementRef:dropableDivRef,
-      isField:false,
-      id:dropableIndex,
-      option:{},
-      fields:{} as Fields
-    })
-    // this.componentBody.nativeElement.appendChild(dropableDivRef);
-    element.appendChild(dropableDivRef);
-    this.draggable(false,this.currentItem.id);
+
+    for (let m = 0; m < 3; m++) {
+      var dropableIndex = Guid.create().toString();
+      const dropableDivRef = this.createDropingArea(event, dropableIndex)
+      this.layoutArray.push({
+        layoutId: id,
+        elementRef: dropableDivRef,
+        isField: false,
+        id: dropableIndex,
+        option: {},
+        fields: {} as Fields
+      });
+      // this.componentBody.nativeElement.appendChild(dropableDivRef);
+      element.appendChild(dropableDivRef);
+    }
+
+    this.draggable(false, this.currentItem.id);
     this.currentItem = {} as Fields;
   }
 
-  onDropComponent(event:any, index:string){
+  onDropComponent(event: any, index: string) {
     event.preventDefault();
     event.stopPropagation();
 
-    const component = this.DropComponent(event,index,true);
+    const component = this.DropComponent(event, index, true);
 
     let layout = {
-      isField:true,
-      id:index,
-      option:component.options,
-      fields:component.field,
-      elementRef:component.elementRef
+      isField: true,
+      id: index,
+      option: component.options,
+      fields: component.field,
+      elementRef: component.elementRef
     } as Layout
-    this.updateLayout(layout,index)
+    this.updateLayout(layout, index)
 
-    this.draggable(false,this.currentItem.id);
+    this.draggable(false, this.currentItem.id);
     console.log("onDropComponent");
   }
- 
-  getMainDiv(index:string){
-    if(this.getLayout(index)!=undefined){
+
+  getMainDiv(index: string) {
+    if (this.getLayout(index) != undefined) {
       const elementRef = this.getLayout(index)!.elementRef;
       while (elementRef.firstChild) {
         elementRef.removeChild(elementRef.firstChild);
       }
-      return {elementRef:elementRef,field:this.currentItem};
+      return { elementRef: elementRef, field: this.currentItem };
     }
-    else{
+    else {
       const createMainDiv = document.createElement("div");
       createMainDiv.className = "col-xl-6 mb-3"
-      createMainDiv.ondrop=(event) =>  this.onDropComponent(event,index);
-      return {elementRef:createMainDiv,field:this.currentItem};
+      createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
+      return { elementRef: createMainDiv, field: this.currentItem };
     }
   }
 
-  DropComponent(event:any,index:string,isReplace:boolean=false){
-
-    let options={
-      placeHolder:this.currentItem.displayName,
-      label: this.currentItem.displayName
+  
+  DropComponent(event: any, index: string, isReplace: boolean = false) {
+    let options = {
+      placeHolder: this.currentItem.displayName,
+      label: this.currentItem.displayName,
     };
-    
+  
     const newComponentElement = document.createElement("div");
-    if(this.currentItem.editorType == editorType[editorType.dxSelectBox]){
-      new dxSelectBox(newComponentElement,{
-        dataSource:this.currentItem.editorOptions?.items,
-        displayExpr:"display",
-        valueExpr:"value"
+  
+    // Create a wrapper div for the label and input element
+    //const wrapper = document.createElement("div");
+    newComponentElement.style.display = "flex"; // Use flex layout to align label and input horizontally
+    //newComponentElement.appendChild(wrapper);
+  
+    const label = document.createElement("label");
+    label.innerText = `${this.currentItem.displayName} : `;
+    newComponentElement.appendChild(label);
+  
+    const wrapper = document.createElement("div");
+
+    if (this.currentItem.editorType == editorType[editorType.dxSelectBox]) {
+      new dxSelectBox(wrapper, {
+        dataSource: this.currentItem.editorOptions?.items,
+        displayExpr: "display",
+        valueExpr: "value",
       });
+    } else if (this.currentItem.editorType == editorType[editorType.dxFileUploader]) {
+      new dxFileUploader(wrapper, {});
+    } else if (
+      this.currentItem.editorType == null ||
+      this.currentItem.editorType == editorType[editorType.dxTextBox]
+    ) {
+      new dxTextBox(wrapper, {
+        //placeholder: this.currentItem.displayName,
+      });
+    } else if (this.currentItem.editorType == editorType[editorType.dxDateBox]) {
+      new dxDateBox(wrapper, {});
     }
-    else if(this.currentItem.editorType == editorType[editorType.dxFileUploader]){
-      new dxFileUploader(newComponentElement,{
-      });
-    }else if(this.currentItem.editorType == null || this.currentItem.editorType == editorType[editorType.dxTextBox]){
-      new dxTextBox(newComponentElement,{
-        label:this.currentItem.displayName,
-        labelMode:'floating'
-      });
-    }else if(this.currentItem.editorType == editorType[editorType.dxDateBox]){
-      new dxDateBox(newComponentElement,{
-      });
-    }
+  
+    newComponentElement.appendChild(wrapper);
+
     const getMainDiv = this.getMainDiv(index);
     const createMainDiv = getMainDiv.elementRef;
-    const btn = document.createElement("div")
-    new dxButton(btn,{
-      icon: 'close',
-      onClick:(event)=> this.removeElemnt(event,createMainDiv,index)
+    const btn = document.createElement("div");
+    new dxButton(btn, {
+      icon: "close",
+      onClick: (event) => this.removeElemnt(event, createMainDiv, index),
     });
-    
+  
+    newComponentElement.appendChild(btn);
 
     createMainDiv.appendChild(newComponentElement);
-    createMainDiv.appendChild(btn);
-      
-    
-    
-    return {elementRef: createMainDiv, options:options, field:getMainDiv.field}
+    //createMainDiv.appendChild(btn);
+  
+    return { elementRef: createMainDiv, options: options, field: getMainDiv.field };
   }
 
-  createComponent(event:any,index:string){
-    
+  createComponent(event: any, index: string) {
+
     const createMainDiv = document.createElement("div");
     createMainDiv.className = "col-xl-6 mb-3"
-    createMainDiv.ondrop=(event) =>  this.onDropComponent(event,index);
-    
-    
+    createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
+
+
     const newComponentElement = document.createElement("div");
-    new dxTextBox(newComponentElement,{
-      label:this.currentItem.displayName,
-      labelMode:'floating'
+    new dxTextBox(newComponentElement, {
+      label: this.currentItem.displayName,
+      labelMode: 'floating'
     });
     // const option:dxButtonOptions
     createMainDiv.appendChild(newComponentElement);
     const btn = document.createElement("div")
-    new dxButton(btn,{
+    new dxButton(btn, {
       icon: 'close',
-      onClick:(event)=> this.removeElemnt(event,createMainDiv,index)
+      onClick: (event) => this.removeElemnt(event, createMainDiv, index)
     });
     createMainDiv.appendChild(btn);
 
@@ -212,43 +230,44 @@ export class BuildFormComponent {
     //   onClick:(event)=> this.expandElement(event,createMainDiv,index)
     // });
     // createMainDiv.appendChild(expandbtn);
-    
-    
+
+
     this.componentBody.nativeElement.appendChild(createMainDiv);
-    
+
     return createMainDiv
   }
 
 
 
-  
 
-  getDropingAreaElement(event:any,index:string){
+
+  getDropingAreaElement(event: any, index: string) {
     const createMainDiv = document.createElement("div");
     createMainDiv.className = "col-xl-6 mb-3"
     createMainDiv.innerHTML = "Drop Here";
-    createMainDiv.ondrop=(event) =>  this.onDropComponent(event,index);
+    createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
     return createMainDiv
   }
-  createDropingArea(event:any,index:string){
-    const createMainDiv = this.getDropingAreaElement(event,index);
+
+  createDropingArea(event: any, index: string) {
+    const createMainDiv = this.getDropingAreaElement(event, index);
     return createMainDiv;
   }
 
-  removeElemnt(event:any,elementRef:any,index:string){
+  removeElemnt(event: any, elementRef: any, index: string) {
     while (elementRef.firstChild) {
       elementRef.removeChild(elementRef.firstChild);
     }
     elementRef.className = "col-xl-6 mb-3"
     elementRef.innerHTML = "Drop Here";
-    elementRef.ondrop=(event:any) =>  this.onDropComponent(event,index);
+    elementRef.ondrop = (event: any) => this.onDropComponent(event, index);
 
-    const layout = {elementRef:elementRef, isField:false, option:{},id:index, fields:{} as Fields } as Layout;
-    this.updateLayout(layout,index)
+    const layout = { elementRef: elementRef, isField: false, option: {}, id: index, fields: {} as Fields } as Layout;
+    this.updateLayout(layout, index)
     // elementRef.remove();
   }
 
-  updateLayout(element:Layout,id:string) {
+  updateLayout(element: Layout, id: string) {
     // Find the index of the element with the specified ID
     const i = this.layoutArray.findIndex((elem) => elem.id === id);
 
@@ -257,7 +276,7 @@ export class BuildFormComponent {
     }
   }
 
-  updateLayouts(element:Layouts,id:string) {
+  updateLayouts(element: Layouts, id: string) {
     // Find the index of the element with the specified ID
     const i = this.layout.findIndex((elem) => elem.id === id);
 
@@ -266,7 +285,7 @@ export class BuildFormComponent {
     }
     console.log(this.layout);
   }
-  getLayouts(id:string):Layouts {
+  getLayouts(id: string): Layouts {
     // Find the index of the element with the specified ID
     const i = this.layout.findIndex((elem) => elem.id === id);
 
@@ -275,7 +294,7 @@ export class BuildFormComponent {
     }
     return {} as Layouts;
   }
-  getLayout(id:string) {
+  getLayout(id: string) {
     // Find the index of the element with the specified ID
     const i = this.layoutArray.findIndex((elem) => elem.id === id);
 
@@ -284,86 +303,86 @@ export class BuildFormComponent {
     }
     return
   }
-  
-  
-  onDragStart(item:any){
+
+
+  onDragStart(item: any) {
     console.log("onDragStart");
-    this.currentItem=item;
+    this.currentItem = item;
   }
-  onDragEnd(event:any){
+  onDragEnd(event: any) {
     console.log("onDragEnd");
     this.isDragOver = false;
     this.currentItem = {} as Fields;
   }
-  onDragOverList(event:any){
+  onDragOverList(event: any) {
     event.preventDefault();
   }
-  onDragEnter(event:any){
+  onDragEnter(event: any) {
     this.isDragOver = true;
   }
-  onDragExit(event:any){
+  onDragExit(event: any) {
     this.isDragOver = false;
   }
 
-  
 
-  InsertObject(list:any[],objectToInsert:any,indexToInsert:string){
+
+  InsertObject(list: any[], objectToInsert: any, indexToInsert: string) {
     const index = this.layoutArray.findIndex(item => item.id === indexToInsert);
     list.splice(index, 0, objectToInsert);
   }
 
-  createCustomText(){
+  createCustomText() {
 
   }
 
-  createLayout(){
+  createLayout() {
     let id = Guid.create().toString();
 
     const createLayoutDiv = document.createElement("div");
     createLayoutDiv.className = "col-xl-12 mb-1 card p-1 h-120px"
-    let layout = {elementRef:createLayoutDiv,id:id,layoutName:""} as Layouts
-    
+    let layout = { elementRef: createLayoutDiv, id: id, layoutName: "" } as Layouts
+
 
     const cardbody = document.createElement("div");
     cardbody.className = "card-body";
     const cardTitle = document.createElement("h5");
     cardTitle.className = "card-title";
-    cardTitle.id="card-title-"+id;
+    cardTitle.id = "card-title-" + id;
     cardbody.appendChild(cardTitle);
 
 
     const div = document.createElement("div");
     div.className = "row";
-    div.id = "insert-div-"+id;
+    div.id = "insert-div-" + id;
     cardbody.appendChild(div);
-    
+
     createLayoutDiv.appendChild(cardbody);
 
-    createLayoutDiv.ondragover=(event)=>this.onDragOverList(event);
-    createLayoutDiv.ondrop=(event)=>this.onDrop(event,id);
-    createLayoutDiv.ondragenter=(event)=>this.onDragEnter(event);
-    createLayoutDiv.ondragleave=(event)=>this.onDragExit(event);
-    createLayoutDiv.oncontextmenu=(event)=>this.open(event,event,layout);
-    
+    createLayoutDiv.ondragover = (event) => this.onDragOverList(event);
+    createLayoutDiv.ondrop = (event) => this.onDrop(event, id);
+    createLayoutDiv.ondragenter = (event) => this.onDragEnter(event);
+    createLayoutDiv.ondragleave = (event) => this.onDragExit(event);
+    createLayoutDiv.oncontextmenu = (event) => this.open(event, event, layout);
+
     this.componentBody.nativeElement.appendChild(createLayoutDiv);
     this.layout.push(layout);
 
   }
-  
-  submit(){
+
+  submit() {
     console.log(this.layoutArray);
   }
-  draggable(status:boolean,id:string){
+  draggable(status: boolean, id: string) {
     let item = this.fields?.find((item) => item.id == id)
-    if(item) {
-      item.draggable=status;
-    } 
+    if (item) {
+      item.draggable = status;
+    }
   }
 
-  open({ x, y }: MouseEvent,e:any, layout:Layouts) {
+  open({ x, y }: MouseEvent, e: any, layout: Layouts) {
     this.close();
     e.preventDefault();
-    this.currentLayoutData.LayoutName=layout.layoutName;
+    this.currentLayoutData.LayoutName = layout.layoutName;
     console.log(layout);
     const positionStrategy = this.overlay.position()
       .flexibleConnectedTo({ x, y })
@@ -402,19 +421,25 @@ export class BuildFormComponent {
     }
   }
 
-  updateLayoutName(layout:Layouts,currentLayoutData:any){
+  updateLayoutName(layout: Layouts, currentLayoutData: any) {
     let id = layout.id;
     let layoutName = currentLayoutData.LayoutName;
     console.log(currentLayoutData);
-    const elementId = document.getElementById("card-title-"+id);
-    if(elementId){
+    const elementId = document.getElementById("card-title-" + id);
+    if (elementId) {
       elementId.innerHTML = layoutName;
       const l = this.getLayouts(id);
       l.layoutName = layoutName;
-      currentLayoutData.LayoutName="";
-      this.updateLayouts(l,id)
+      currentLayoutData.LayoutName = "";
+      this.updateLayouts(l, id)
       this.close();
     }
   }
+
+  onValueChanged(e: any) {
+    this.enteredValue = e.value;
+    this.currentLayoutData.LayoutName = this.enteredValue;
+  }
+
 
 }
