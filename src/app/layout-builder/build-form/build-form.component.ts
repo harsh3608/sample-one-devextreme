@@ -24,7 +24,7 @@ export class BuildFormComponent {
   overlayRef!: OverlayRef | null;
   sub!: Subscription;
   currentLayoutData = {
-    LayoutName: '' // Initialize with a default value or set it based on your data
+    categoryName: '' // Initialize with a default value or set it based on your data
   };
 
   items = [
@@ -69,8 +69,7 @@ export class BuildFormComponent {
   ];
   isDragOver = false;
 
-  onDrop(event: any, id: string) {
-    debugger;
+  onDrop(event: any, id: string, categoryName: string) {
     let element = event.srcElement;
 
     if (element.hasChildNodes()) {
@@ -89,10 +88,10 @@ export class BuildFormComponent {
       id: index,
       option: divRef.options,
       fields: divRef.field,
-      categoryName: ''
+      categoryName: categoryName
     })
     // this.componentBody.nativeElement.appendChild(divRef.elementRef);
-    element.appendChild(divRef.elementRef);
+    element?.appendChild(divRef.elementRef);
 
     for (let m = 0; m < 3; m++) {
       var dropableIndex = Guid.create().toString();
@@ -104,10 +103,10 @@ export class BuildFormComponent {
         id: dropableIndex,
         option: {},
         fields: {} as Fields,
-        categoryName: ''
+        categoryName: categoryName
       });
       // this.componentBody.nativeElement.appendChild(dropableDivRef);
-      element.appendChild(dropableDivRef);
+      element?.appendChild(dropableDivRef);
     }
 
     this.draggable(false, this.currentItem.id);
@@ -125,7 +124,8 @@ export class BuildFormComponent {
       id: index,
       option: component.options,
       fields: component.field,
-      elementRef: component.elementRef
+      elementRef: component.elementRef,
+      categoryName: 'w/o Category Id'
     } as Category
     this.updateLayout(layout, index)
 
@@ -134,6 +134,7 @@ export class BuildFormComponent {
   }
 
   getMainDiv(index: string) {
+    debugger;
     if (this.getLayout(index) != undefined) {
       const elementRef = this.getLayout(index)!.elementRef;
       while (elementRef.firstChild) {
@@ -251,7 +252,6 @@ export class BuildFormComponent {
   }
 
   removeElemnt(event: any, elementRef: any, index: string) {
-    debugger;
     while (elementRef.firstChild) {
       elementRef.removeChild(elementRef.firstChild);
     }
@@ -357,7 +357,7 @@ export class BuildFormComponent {
 
     const createLayoutDiv = document.createElement("div");
     createLayoutDiv.className = "col-xl-12 mb-1 card p-1 h-120px"
-    let layout = { elementRef: createLayoutDiv, id: id, layoutName: "Default Category" } as Layouts
+    let category = { elementRef: createLayoutDiv, id: id, categoryName: "Default Category" } as Layouts
 
     const head = document.createElement("div");
     head.className = "d-flex flex-row justify-content-between";
@@ -376,7 +376,7 @@ export class BuildFormComponent {
     const button = document.createElement("div");
     new dxButton(button, {
       icon: 'overflow',
-      onClick: (event) => this.open(event, layout),
+      onClick: (event) => this.open(event, category),
       type: "normal",
       stylingMode: "outlined",
     });
@@ -392,34 +392,44 @@ export class BuildFormComponent {
     createLayoutDiv.appendChild(cardbody);
 
     createLayoutDiv.ondragover = (event) => this.onDragOverList(event);
-    createLayoutDiv.ondrop = (event) => this.onDrop(event, id);
+    createLayoutDiv.ondrop = (event) => this.onDrop(event, id, category.categoryName);
     createLayoutDiv.ondragenter = (event) => this.onDragEnter(event);
     createLayoutDiv.ondragleave = (event) => this.onDragExit(event);
-    //createLayoutDiv.oncontextmenu = (event) => this.open(event, event, layout);
 
     this.componentBody.nativeElement.appendChild(createLayoutDiv);
-    this.layout.push(layout);
+    this.layout.push(category);
 
   }
 
   submit() {
     console.log(this.layoutArray);
+    this.groupAndOrganizeObjects(this.layoutArray);
+  }
+
+  groupAndOrganizeObjects(layoutArray: Category[]) {
+    const groupedObjects: { [key: string]: Category[] } = {};
+
+    layoutArray.forEach((obj) => {
+      const { categoryId, categoryName, ...rest } = obj;
+      if (!groupedObjects[categoryName]) {
+        groupedObjects[categoryName] = [];
+      }
+      groupedObjects[categoryName].push({ categoryId, categoryName, ...rest });
+    });
+
+    console.log(groupedObjects);
+
+    return groupedObjects;
   }
 
   draggable(status: boolean, id: string) {
     this.fields = this.fields.filter(x => x.id !== id);
-    // let item = this.fields?.find((item) => item.id == id)
-    // if (item) {
-    //   item.draggable = status;
-    // }
   }
 
-  //open({ x, y }: MouseEvent, e: any, layout: Layouts) {
   open(clickEvent: any, layout: Layouts) {
-    debugger;
     this.close();
     // clickEvent.preventDefault();
-    this.currentLayoutData.LayoutName = layout.layoutName;
+    this.currentLayoutData.categoryName = layout.categoryName;
     console.log(layout);
 
     // Calculate the center of the screen
@@ -466,13 +476,13 @@ export class BuildFormComponent {
 
   updateLayoutName(layout: Layouts, currentLayoutData: any) {
     let id = layout.id;
-    let layoutName = currentLayoutData.LayoutName;
+    let layoutName = currentLayoutData.categoryName;
     console.log(currentLayoutData);
     const elementId = document.getElementById("card-title-" + id);
     if (elementId) {
       elementId.innerHTML = layoutName;
       const l = this.getLayouts(id);
-      l.layoutName = layoutName;
+      l.categoryName = layoutName;
       currentLayoutData.LayoutName = "";
       this.updateLayouts(l, id)
       this.close();

@@ -123,7 +123,7 @@ export interface Category {
 export interface Layouts {
   id:string,
   elementRef:HTMLDivElement,
-  layoutName:string
+  categoryName:string
 }
 
 export interface ValidationOption{
