@@ -23,6 +23,10 @@ export class DevDataGridService {
     return this.http.get<Fields[]>(environment.baseApi+"fields?objectId="+id);
   }
 
+  getObjectFieldById(objectId: number, id: string): Observable<Fields>{
+    return this.http.get<Fields>(environment.baseApi+"fields?objectId="+objectId+"&id="+id);
+  }
+
   getObjects(): Observable<Objects[]> {
     return this.http.get<Objects[]>(environment.baseApi+"objects");
   }
@@ -107,13 +111,14 @@ export interface Fields {
   validator?:any,
   draggable:boolean 
 }
-export interface Layout {
+export interface Category {
   elementRef:HTMLDivElement, 
   isField:boolean, 
   id:string, 
   option:any,
   fields:Fields,
-  layoutId:string
+  categoryId:string,
+  categoryName: string
 }
 export interface Layouts {
   id:string,

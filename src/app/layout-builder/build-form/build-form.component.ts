@@ -9,7 +9,7 @@ import { Guid } from 'guid-typescript';
 import { Overlay, OverlayOutsideClickDispatcher, OverlayRef } from '@angular/cdk/overlay';
 import { Subscription, filter, fromEvent, take } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { DevDataGridService, Fields, Layout, Layouts, editorType } from '../shared/services/dev-data-grid.service';
+import { DevDataGridService, Fields, Category, Layouts, editorType } from '../shared/services/dev-data-grid.service';
 
 @Component({
   selector: 'app-build-form',
@@ -41,7 +41,7 @@ export class BuildFormComponent {
   }
 
   ngAfterViewInit() {
-    this.createLayout()
+    this.createCategory()
   }
 
   layout: Layouts[] = [];
@@ -64,7 +64,7 @@ export class BuildFormComponent {
     }
 
   ];
-  layoutArray: Layout[] = [
+  layoutArray: Category[] = [
 
   ];
   isDragOver = false;
@@ -83,12 +83,13 @@ export class BuildFormComponent {
 
     const divRef = this.DropComponent(event, index);
     this.layoutArray.push({
-      layoutId: id,
+      categoryId: id,
       elementRef: divRef.elementRef,
       isField: true,
       id: index,
       option: divRef.options,
-      fields: divRef.field
+      fields: divRef.field,
+      categoryName: ''
     })
     // this.componentBody.nativeElement.appendChild(divRef.elementRef);
     element.appendChild(divRef.elementRef);
@@ -97,12 +98,13 @@ export class BuildFormComponent {
       var dropableIndex = Guid.create().toString();
       const dropableDivRef = this.createDropingArea(event, dropableIndex)
       this.layoutArray.push({
-        layoutId: id,
+        categoryId: id,
         elementRef: dropableDivRef,
         isField: false,
         id: dropableIndex,
         option: {},
-        fields: {} as Fields
+        fields: {} as Fields,
+        categoryName: ''
       });
       // this.componentBody.nativeElement.appendChild(dropableDivRef);
       element.appendChild(dropableDivRef);
@@ -124,7 +126,7 @@ export class BuildFormComponent {
       option: component.options,
       fields: component.field,
       elementRef: component.elementRef
-    } as Layout
+    } as Category
     this.updateLayout(layout, index)
 
     this.draggable(false, this.currentItem.id);
@@ -249,6 +251,7 @@ export class BuildFormComponent {
   }
 
   removeElemnt(event: any, elementRef: any, index: string) {
+    debugger;
     while (elementRef.firstChild) {
       elementRef.removeChild(elementRef.firstChild);
     }
@@ -258,18 +261,35 @@ export class BuildFormComponent {
     child.innerHTML = "Drop Here";
     elementRef.appendChild(child);
     elementRef.ondrop = (event: any) => this.onDropComponent(event, index);
-    const layout = { elementRef: elementRef, isField: false, option: {}, id: index, fields: {} as Fields } as Layout;
+    const layout = { elementRef: elementRef, isField: false, option: {}, id: index, fields: {} as Fields } as Category;
     this.updateLayout(layout, index)
     // elementRef.remove();
   }
 
-  updateLayout(element: Layout, id: string) {
+  updateLayout(element: Category, id: string) {
     // Find the index of the element with the specified ID
     const i = this.layoutArray.findIndex((elem) => elem.id === id);
+    //to update fields table
+    const fieldObjectId = this.layoutArray[i].fields.objectId;
+    const fieldId = this.layoutArray[i].fields.id;
+    if (element.isField == false) {
+      this.updateFields(fieldObjectId, fieldId);
+    };
 
     if (i !== -1) {
       this.layoutArray[i] = element;
-    }
+    };
+  }
+
+  //to Update Fields on Removal of layout field
+  updateFields(objectId: number, id: string) {
+    this.service.getObjectField(objectId).subscribe(
+      (res) => {
+        const fields = res.map((e: Fields) => { e.draggable = true; return e; });
+        const filteredFields = fields.filter(field => field.id == id);
+        this.fields.push(filteredFields[0]);
+      }
+    );
   }
 
   updateLayouts(element: Layouts, id: string) {
@@ -332,12 +352,12 @@ export class BuildFormComponent {
 
   }
 
-  createLayout() {
+  createCategory() {
     let id = Guid.create().toString();
 
     const createLayoutDiv = document.createElement("div");
     createLayoutDiv.className = "col-xl-12 mb-1 card p-1 h-120px"
-    let layout = { elementRef: createLayoutDiv, id: id, layoutName: "Category" } as Layouts
+    let layout = { elementRef: createLayoutDiv, id: id, layoutName: "Default Category" } as Layouts
 
     const head = document.createElement("div");
     head.className = "d-flex flex-row justify-content-between";
@@ -346,6 +366,7 @@ export class BuildFormComponent {
     const cardbody = document.createElement("div");
     cardbody.className = "card-body";
     const cardTitle = document.createElement("h5");
+    cardTitle.innerHTML = "Default Category"
     cardTitle.className = "card-title";
     cardTitle.id = "card-title-" + id;
     cardbody.appendChild(cardTitle);
@@ -356,8 +377,8 @@ export class BuildFormComponent {
     new dxButton(button, {
       icon: 'overflow',
       onClick: (event) => this.open(event, layout),
-      type:"normal",
-      stylingMode:"outlined",
+      type: "normal",
+      stylingMode: "outlined",
     });
     //createLayoutDiv.appendChild(button);
     head.appendChild(button);
@@ -458,10 +479,6 @@ export class BuildFormComponent {
     }
   }
 
-  // onValueChanged(e: any) {
-  //   this.enteredValue = e.value;
-  //   this.currentLayoutData.LayoutName = this.enteredValue;
-  // }
 
 
 }
