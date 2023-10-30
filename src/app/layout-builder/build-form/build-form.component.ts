@@ -26,11 +26,9 @@ export class BuildFormComponent {
   currentLayoutData = {
     categoryName: '' // Initialize with a default value or set it based on your data
   };
-
   items = [
     { dataField: 'LayoutName' }
   ];
-
   enteredValue: string = 'Default Layout';
 
 
@@ -70,6 +68,7 @@ export class BuildFormComponent {
   isDragOver = false;
 
   onDrop(event: any, id: string, categoryName: string) {
+    debugger;
     let element = event.srcElement;
 
     if (element.hasChildNodes()) {
@@ -117,6 +116,8 @@ export class BuildFormComponent {
     event.preventDefault();
     event.stopPropagation();
 
+    const category = this.getLayout(index);
+
     const component = this.DropComponent(event, index, true);
 
     let layout = {
@@ -125,7 +126,8 @@ export class BuildFormComponent {
       option: component.options,
       fields: component.field,
       elementRef: component.elementRef,
-      categoryName: 'w/o Category Id'
+      categoryName: category?.categoryName,
+      categoryId: category?.categoryId
     } as Category
     this.updateLayout(layout, index)
 
@@ -152,22 +154,17 @@ export class BuildFormComponent {
 
 
   DropComponent(event: any, index: string, isReplace: boolean = false) {
+    debugger;
     let options = {
       placeHolder: this.currentItem.displayName,
       label: this.currentItem.displayName,
     };
-
     const newComponentElement = document.createElement("div");
-
     // Create a wrapper div for the label and input element
-    //const wrapper = document.createElement("div");
     newComponentElement.style.display = "flex"; // Use flex layout to align label and input horizontally
-    //newComponentElement.style.border = "light";
-
     const label = document.createElement("label");
     label.innerText = `${this.currentItem.displayName} : `;
     newComponentElement.appendChild(label);
-
     const wrapper = document.createElement("div");
 
     if (this.currentItem.editorType == editorType[editorType.dxSelectBox]) {
@@ -182,9 +179,7 @@ export class BuildFormComponent {
       this.currentItem.editorType == null ||
       this.currentItem.editorType == editorType[editorType.dxTextBox]
     ) {
-      new dxTextBox(wrapper, {
-        //placeholder: this.currentItem.displayName,
-      });
+      new dxTextBox(wrapper, {});
     } else if (this.currentItem.editorType == editorType[editorType.dxDateBox]) {
       new dxDateBox(wrapper, {});
     }
@@ -217,7 +212,6 @@ export class BuildFormComponent {
       label: this.currentItem.displayName,
       labelMode: 'floating'
     });
-    // const option:dxButtonOptions
     createMainDiv.appendChild(newComponentElement);
     const btn = document.createElement("div")
     new dxButton(btn, {
