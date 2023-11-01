@@ -9,7 +9,7 @@ import { Guid } from 'guid-typescript';
 import { Overlay, OverlayOutsideClickDispatcher, OverlayRef } from '@angular/cdk/overlay';
 import { Subscription, filter, fromEvent, take } from 'rxjs';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { DevDataGridService, Fields, Category, Layouts, editorType } from '../shared/services/dev-data-grid.service';
+import { DevDataGridService, Fields, Category, Categories, editorType } from '../shared/services/dev-data-grid.service';
 
 @Component({
   selector: 'app-build-form',
@@ -42,7 +42,7 @@ export class BuildFormComponent {
     this.createCategory()
   }
 
-  layout: Layouts[] = [];
+  categories: Categories[] = [];
 
   componentArray: any = [
     {
@@ -68,7 +68,6 @@ export class BuildFormComponent {
   isDragOver = false;
 
   onDrop(event: any, id: string, categoryName: string) {
-    debugger;
     let element = event.srcElement;
 
     if (element.hasChildNodes()) {
@@ -117,8 +116,13 @@ export class BuildFormComponent {
     event.stopPropagation();
 
     const category = this.getLayout(index);
-
     const component = this.DropComponent(event, index, true);
+
+    let element = event.srcElement;
+    if (element.hasChildNodes()) {
+      const id = category?.categoryId;
+      element.querySelector("#" + "insert-div-" + id);
+    }
 
     let layout = {
       isField: true,
@@ -129,14 +133,32 @@ export class BuildFormComponent {
       categoryName: category?.categoryName,
       categoryId: category?.categoryId
     } as Category
-    this.updateLayout(layout, index)
-
     this.draggable(false, this.currentItem.id);
+
+    const emptyFields = this.layoutArray.filter(field => field.categoryId == category?.categoryId && field.isField == false);
+
+    if (emptyFields.length === 2) {
+      for (let m = 0; m < 2; m++) {
+        var dropableIndex = Guid.create().toString();
+        const dropableDivRef = this.createDropingArea(event, dropableIndex)
+        this.layoutArray.push({
+          categoryId: category?.categoryId || '',
+          elementRef: dropableDivRef,
+          isField: false,
+          id: dropableIndex,
+          option: {},
+          fields: {} as Fields,
+          categoryName: category?.categoryName || ''
+        });
+        event.currentTarget.parentNode?.appendChild(dropableDivRef);
+      }
+
+    }
+    this.updateLayout(layout, index);
     console.log("onDropComponent");
   }
 
   getMainDiv(index: string) {
-    debugger;
     if (this.getLayout(index) != undefined) {
       const elementRef = this.getLayout(index)!.elementRef;
       while (elementRef.firstChild) {
@@ -154,7 +176,6 @@ export class BuildFormComponent {
 
 
   DropComponent(event: any, index: string, isReplace: boolean = false) {
-    debugger;
     let options = {
       placeHolder: this.currentItem.displayName,
       label: this.currentItem.displayName,
@@ -206,7 +227,6 @@ export class BuildFormComponent {
     const createMainDiv = document.createElement("div");
     createMainDiv.className = "col-xl-6 mb-3"
     createMainDiv.ondrop = (event) => this.onDropComponent(event, index);
-
     const newComponentElement = document.createElement("div");
     new dxTextBox(newComponentElement, {
       label: this.currentItem.displayName,
@@ -219,14 +239,9 @@ export class BuildFormComponent {
       onClick: (event) => this.removeElemnt(event, createMainDiv, index)
     });
     createMainDiv.appendChild(btn);
-
     this.componentBody.nativeElement.appendChild(createMainDiv);
-
     return createMainDiv
   }
-
-
-
 
 
   getDropingAreaElement(event: any, index: string) {
@@ -286,24 +301,24 @@ export class BuildFormComponent {
     );
   }
 
-  updateLayouts(element: Layouts, id: string) {
+  updateLayouts(element: Categories, id: string) {
     // Find the index of the element with the specified ID
-    const i = this.layout.findIndex((elem) => elem.id === id);
+    const i = this.categories.findIndex((elem) => elem.id === id);
+    if (i !== -1) {
+      this.categories[i] = element;
+    }
+  }
+
+  getLayouts(id: string): Categories {
+    // Find the index of the element with the specified ID
+    const i = this.categories.findIndex((elem) => elem.id === id);
 
     if (i !== -1) {
-      this.layout[i] = element;
+      return this.categories[i];
     }
-    console.log(this.layout);
+    return {} as Categories;
   }
-  getLayouts(id: string): Layouts {
-    // Find the index of the element with the specified ID
-    const i = this.layout.findIndex((elem) => elem.id === id);
 
-    if (i !== -1) {
-      return this.layout[i];
-    }
-    return {} as Layouts;
-  }
   getLayout(id: string) {
     // Find the index of the element with the specified ID
     const i = this.layoutArray.findIndex((elem) => elem.id === id);
@@ -329,6 +344,9 @@ export class BuildFormComponent {
     event.preventDefault();
   }
   onDragEnter(event: any) {
+    // sessionStorage.setItem('src-element',JSON.stringify(event.srcElement));
+    // console.log((event));
+
     this.isDragOver = true;
   }
   onDragExit(event: any) {
@@ -351,7 +369,7 @@ export class BuildFormComponent {
 
     const createLayoutDiv = document.createElement("div");
     createLayoutDiv.className = "col-xl-12 mb-1 card p-1 h-120px"
-    let category = { elementRef: createLayoutDiv, id: id, categoryName: "Default Category" } as Layouts
+    let category = { elementRef: createLayoutDiv, id: id, categoryName: "Default Category" } as Categories
 
     const head = document.createElement("div");
     head.className = "d-flex flex-row justify-content-between";
@@ -391,36 +409,61 @@ export class BuildFormComponent {
     createLayoutDiv.ondragleave = (event) => this.onDragExit(event);
 
     this.componentBody.nativeElement.appendChild(createLayoutDiv);
-    this.layout.push(category);
+    this.categories.push(category);
 
   }
 
   submit() {
-    console.log(this.layoutArray);
     this.groupAndOrganizeObjects(this.layoutArray);
   }
 
   groupAndOrganizeObjects(layoutArray: Category[]) {
     const groupedObjects: { [key: string]: Category[] } = {};
-
     layoutArray.forEach((obj) => {
       const { categoryId, categoryName, ...rest } = obj;
-      if (!groupedObjects[categoryName]) {
-        groupedObjects[categoryName] = [];
+      if (!groupedObjects[categoryId]) {
+        groupedObjects[categoryId] = [];
       }
-      groupedObjects[categoryName].push({ categoryId, categoryName, ...rest });
+      groupedObjects[categoryId].push({ categoryId, categoryName, ...rest });
     });
-
-    console.log(groupedObjects);
-
+    this.replaceKeysWithCategoryNames(groupedObjects);
     return groupedObjects;
   }
+
+  replaceKeysWithCategoryNames(data: any): any {
+    const result: any = {};
+    for (const categoryId in data) {
+      if (data.hasOwnProperty(categoryId)) {
+        // Find the corresponding category by ID
+        const category = this.categories.find(category => category.id === categoryId);
+  
+        if (category) {
+          const categoryName = category.categoryName;
+          // Replace the key with the category name
+          result[categoryName] = data[categoryId];
+  
+          // Update the category name for all objects in the array
+          if (Array.isArray(result[categoryName])) {
+            result[categoryName] = result[categoryName].map((item: any) => {
+              return { ...item, categoryName };
+            });
+          }
+        } else {
+          // If no matching category is found, keep the original key
+          result[categoryId] = data[categoryId];
+        }
+      }
+    }
+    console.log(result);
+    return result;
+  }
+
 
   draggable(status: boolean, id: string) {
     this.fields = this.fields.filter(x => x.id !== id);
   }
 
-  open(clickEvent: any, layout: Layouts) {
+  open(clickEvent: any, layout: Categories) {
     this.close();
     // clickEvent.preventDefault();
     this.currentLayoutData.categoryName = layout.categoryName;
@@ -468,10 +511,9 @@ export class BuildFormComponent {
     }
   }
 
-  updateLayoutName(layout: Layouts, currentLayoutData: any) {
+  updateLayoutName(layout: Categories, currentLayoutData: any) {
     let id = layout.id;
     let layoutName = currentLayoutData.categoryName;
-    console.log(currentLayoutData);
     const elementId = document.getElementById("card-title-" + id);
     if (elementId) {
       elementId.innerHTML = layoutName;

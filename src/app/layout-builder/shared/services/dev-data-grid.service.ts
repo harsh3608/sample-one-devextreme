@@ -116,7 +116,7 @@ export interface Category {
   categoryId:string,
   categoryName: string
 }
-export interface Layouts {
+export interface Categories {
   id:string,
   elementRef:HTMLDivElement,
   categoryName:string
