@@ -35,7 +35,25 @@ export class BuildFormComponent {
   constructor(private service: DevDataGridService, public overlay: Overlay, public viewContainerRef: ViewContainerRef, private elementRef: ElementRef) {
     this.service.getObjectField(3).subscribe((result) => {
       this.fields = result.map((e: Fields) => { e.draggable = true; return e; });
-    })
+      this.fields.splice(0, 0,
+        {
+          id: '22',
+          objectId: 3,
+          fieldName: 'CustomText',
+          displayName: 'Custom Text',
+          width: 'auto',
+          dataType: 'string',
+          format: '',
+          isVisible: true,
+          editorType: 'dxAutocomplete',
+          validationOption: [],
+          draggable: true
+        }
+      );
+      console.log(this.fields);
+    });
+
+
   }
 
   ngAfterViewInit() {
@@ -203,6 +221,10 @@ export class BuildFormComponent {
       new dxTextBox(wrapper, {});
     } else if (this.currentItem.editorType == editorType[editorType.dxDateBox]) {
       new dxDateBox(wrapper, {});
+    } else {
+      var emptyDiv = document.createElement('div');
+      emptyDiv.style.width = '200px';
+      wrapper.appendChild(emptyDiv);
     }
 
     newComponentElement.appendChild(wrapper);
@@ -296,7 +318,9 @@ export class BuildFormComponent {
       (res) => {
         const fields = res.map((e: Fields) => { e.draggable = true; return e; });
         const filteredFields = fields.filter(field => field.id == id);
-        this.fields.push(filteredFields[0]);
+        if (id !== '22') {
+          this.fields.push(filteredFields[0]);
+        };
       }
     );
   }
@@ -436,12 +460,12 @@ export class BuildFormComponent {
       if (data.hasOwnProperty(categoryId)) {
         // Find the corresponding category by ID
         const category = this.categories.find(category => category.id === categoryId);
-  
+
         if (category) {
           const categoryName = category.categoryName;
           // Replace the key with the category name
           result[categoryName] = data[categoryId];
-  
+
           // Update the category name for all objects in the array
           if (Array.isArray(result[categoryName])) {
             result[categoryName] = result[categoryName].map((item: any) => {
@@ -460,7 +484,10 @@ export class BuildFormComponent {
 
 
   draggable(status: boolean, id: string) {
-    this.fields = this.fields.filter(x => x.id !== id);
+    if (id !== '22') {
+      this.fields = this.fields.filter(x => x.id !== id);
+    }
+
   }
 
   open(clickEvent: any, layout: Categories) {
