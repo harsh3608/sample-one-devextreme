@@ -26,6 +26,12 @@
             </div>
         </div>
         <div class="col-md-4">
+            <div class="card" style="height: 200px;">
+                <div class="card-body">
+                    <div><h4>LAYOUT OPTIONS</h4></div>
+
+                </div>
+            </div>
             <div class="card vh-100">
                 <div class="card-body">
                     <div class="task" [ngClass]="{'disabled': !item.draggable}" [draggable]="item.draggable"
@@ -44,6 +50,22 @@
         <dx-form [formData]="currentLayoutData" formoptions="{repaintChangesOnly: true}">
             <dxi-item dataField="categoryName"></dxi-item>
         </dx-form>
+        <div class="d-flex flex-row justify-content-between p-2">
+            <div>
+                <dx-button text="Save" type="default" (click)="updateLayoutName(user,currentLayoutData)"></dx-button>
+            </div>
+            <div>
+                <dx-button text="Close" type="danger" (click)="close()"></dx-button>
+            </div>
+        </div>
+    </section>
+</ng-template>
+
+<ng-template #deleteMenu let-user>
+    <section class="user-menu p-2 ">
+        <!-- <dx-form [formData]="currentLayoutData" formoptions="{repaintChangesOnly: true}">
+            <dxi-item dataField="categoryName"></dxi-item>
+        </dx-form> -->
         <div class="d-flex flex-row justify-content-between p-2">
             <div>
                 <dx-button text="Save" type="default" (click)="updateLayoutName(user,currentLayoutData)"></dx-button>

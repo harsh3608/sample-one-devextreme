@@ -19,6 +19,7 @@ import { DevDataGridService, Fields, Category, Categories, editorType } from '..
 export class BuildFormComponent {
   @ViewChild('componentBody') public componentBody!: ElementRef;
   @ViewChild('userMenu') userMenu!: TemplateRef<any>;
+  @ViewChild('deleteMenu') deleteMenu!: TemplateRef<any>;
   fields!: Fields[];
   currentItem!: Fields;
   overlayRef!: OverlayRef | null;
@@ -408,6 +409,7 @@ export class BuildFormComponent {
     cardbody.appendChild(cardTitle);
     head.appendChild(cardTitle);
 
+    const buttons = document.createElement("div");
 
     const button = document.createElement("div");
     new dxButton(button, {
@@ -417,7 +419,18 @@ export class BuildFormComponent {
       stylingMode: "outlined",
     });
     //createLayoutDiv.appendChild(button);
-    head.appendChild(button);
+    buttons.appendChild(button);
+
+    const deleteButton = document.createElement("div");
+    new dxButton(deleteButton, {
+      icon: 'close',
+      onClick: (event) => this.openDeleteModal(event, category),
+      type: "normal",
+      stylingMode: "outlined",
+    });
+    //createLayoutDiv.appendChild(button);
+    buttons.appendChild(deleteButton);
+    head.appendChild(buttons);
 
     const div = document.createElement("div");
     div.className = "row";
@@ -517,6 +530,46 @@ export class BuildFormComponent {
     });
 
     this.overlayRef.attach(new TemplatePortal(this.userMenu, this.viewContainerRef, {
+      $implicit: layout
+    }));
+
+    this.sub = fromEvent<MouseEvent>(document, 'click')
+      .pipe(
+        filter(event => {
+          const clickTarget = event.target as HTMLElement;
+          return !!this.overlayRef && !this.overlayRef.overlayElement.contains(clickTarget);
+        }),
+        take(1)
+      ).subscribe({})
+  }
+
+  openDeleteModal(clickEvent: any, layout: Categories) {
+    this.close();
+    // clickEvent.preventDefault();
+    this.currentLayoutData.categoryName = layout.categoryName;
+    console.log(layout);
+
+    // Calculate the center of the screen
+    const centerX = 850;
+    const centerY = 300;
+
+    const positionStrategy = this.overlay.position()
+      .flexibleConnectedTo({ x: centerX, y: centerY })
+      .withPositions([
+        {
+          originX: 'end',
+          originY: 'bottom',
+          overlayX: 'end',
+          overlayY: 'top',
+        }
+      ]);
+
+    this.overlayRef = this.overlay.create({
+      positionStrategy,
+      scrollStrategy: this.overlay.scrollStrategies.close()
+    });
+
+    this.overlayRef.attach(new TemplatePortal(this.deleteMenu, this.viewContainerRef, {
       $implicit: layout
     }));
 
