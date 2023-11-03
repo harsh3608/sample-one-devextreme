@@ -544,10 +544,11 @@ export class BuildFormComponent {
   }
 
   openDeleteModal(clickEvent: any, layout: Categories) {
+    debugger;
     this.close();
     // clickEvent.preventDefault();
-    this.currentLayoutData.categoryName = layout.categoryName;
-    console.log(layout);
+    // this.currentLayoutData.categoryName = layout.categoryName;
+    // console.log(layout);
 
     // Calculate the center of the screen
     const centerX = 850;
@@ -581,6 +582,13 @@ export class BuildFormComponent {
         }),
         take(1)
       ).subscribe({})
+  }
+
+  deleteLayout(layout: Categories) {
+    debugger;
+    let id = layout.id;
+    this.categories = this.categories.filter(x=> x.id !== id);
+    this.close();
   }
 
   close() {

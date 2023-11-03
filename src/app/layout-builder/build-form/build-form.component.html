@@ -62,16 +62,19 @@
 </ng-template>
 
 <ng-template #deleteMenu let-user>
-    <section class="user-menu p-2 ">
+    <section class="delete-menu p-2 ">
         <!-- <dx-form [formData]="currentLayoutData" formoptions="{repaintChangesOnly: true}">
             <dxi-item dataField="categoryName"></dxi-item>
         </dx-form> -->
+        <div style="height: 100px; width: 150px;">
+            <h5>Are you sure to delete this layout category ?</h5>
+        </div>
         <div class="d-flex flex-row justify-content-between p-2">
-            <div>
-                <dx-button text="Save" type="default" (click)="updateLayoutName(user,currentLayoutData)"></dx-button>
+            <div class="mx-3">
+                <dx-button text="Delete" type="danger" (click)="deleteLayout(user)"></dx-button>
             </div>
-            <div>
-                <dx-button text="Close" type="danger" (click)="close()"></dx-button>
+            <div class="mx-3">
+                <dx-button text="Close" type="normal" (click)="close()"></dx-button>
             </div>
         </div>
     </section>
