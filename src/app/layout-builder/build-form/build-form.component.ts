@@ -588,6 +588,15 @@ export class BuildFormComponent {
     debugger;
     let id = layout.id;
     this.categories = this.categories.filter(x=> x.id !== id);
+
+
+    // Remove the layout's elementRef from its parent
+    const elementRef = layout.elementRef;
+    const parentElement = elementRef.parentElement;
+
+    if (parentElement) {
+      parentElement.removeChild(elementRef);
+    }
     this.close();
   }
 
