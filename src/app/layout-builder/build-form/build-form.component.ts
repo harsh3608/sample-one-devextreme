@@ -26,6 +26,7 @@ import {
   Category,
   Categories,
   editorType,
+  EditorOptions,
 } from '../shared/services/dev-data-grid.service';
 
 @Component({
@@ -59,6 +60,53 @@ export class BuildFormComponent {
   //     this.showRenameCustomText = false;
   //   }
   // }
+  objects: any[] = [
+      {
+        display: 'Broker Issue - Statement Transaction',
+        value: '123',
+      },
+      {
+        display: 'Broker Issue - Transaction Failed',
+        value: '345',
+      },
+      {
+        display: 'Broker Issue - Account Transaction',
+        value: '678',
+      },
+    ];
+
+  views: any[] = [
+      {
+        display: 'Active Broker Issues',
+        value: '10',
+      },
+      {
+        display: 'Active Broker Issues FT',
+        value: '20',
+      },
+      {
+        display: 'Active Broker Issues ST',
+        value: '30',
+      },
+      {
+        display: 'All Broker Issue',
+        value: '40',
+      },
+      {
+        display: 'All Broker Issue with Deleted',
+        value: '50',
+      },
+      {
+        display: 'Broker Issue - Account Transaction',
+        value: '60',
+      },
+    ];
+
+    booleans: string[] = ['Yes', 'No'];
+
+
+
+
 
   constructor(
     private service: DevDataGridService,

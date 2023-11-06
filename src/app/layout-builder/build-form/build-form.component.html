@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card" style="height: 200px;">
+            <div class="card" style="height: max-content;">
                 <div class="card-body">
                     <div>
                         <h4>LAYOUT OPTIONS</h4>
@@ -39,14 +39,23 @@
                     <div class="p-2 " *ngIf="showObjectListPanel" #renameCustomText>
                         <h6>Custom Text:</h6>
 
-                        <div>
-                            <dx-text-area></dx-text-area>
+                        <div class="m-2 d-flex justify-content-between">
+                            <label>Object:</label>
+                            <dx-select-box [dataSource]="objects" displayExpr="display"
+                                valueExpr="value"></dx-select-box>
                         </div>
-                        <div>
-                            <dx-button type="success">Submit</dx-button>
+                        <div class="m-2 d-flex justify-content-between">
+                            <label>View:</label>
+                            <dx-select-box [dataSource]="views" displayExpr="display" valueExpr="value"></dx-select-box>
                         </div>
-                        <div>
-                            <dx-button icon="overflow"></dx-button>
+                        <div class="m-2 d-flex justify-content-between">
+                            <label>Links Point to Popup:</label>
+                            <dx-radio-group [items]="booleans"  layout="horizontal">
+                            </dx-radio-group>
+                        </div>
+                        <div class="m-2 d-flex justify-content-between">
+                            <label>Friendly Name:</label>
+                            <dx-text-box></dx-text-box>
                         </div>
 
                     </div>
