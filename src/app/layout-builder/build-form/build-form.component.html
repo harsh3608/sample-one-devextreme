@@ -10,6 +10,10 @@
             </div>
 
             <button class="btn btn-primary" (click)="createCategory()">Add Category</button>
+
+            <div class="px-2">
+                <button class="btn btn-primary" (click)="addObjectList()">Add Object List</button>
+            </div>
         </div>
     </div>
 
@@ -28,12 +32,32 @@
         <div class="col-md-4">
             <div class="card" style="height: 200px;">
                 <div class="card-body">
-                    <div><h4>LAYOUT OPTIONS</h4></div>
+                    <div>
+                        <h4>LAYOUT OPTIONS</h4>
+                    </div>
+
+                    <div class="p-2 " *ngIf="showObjectListPanel" #renameCustomText>
+                        <h6>Custom Text:</h6>
+
+                        <div>
+                            <dx-text-area></dx-text-area>
+                        </div>
+                        <div>
+                            <dx-button type="success">Submit</dx-button>
+                        </div>
+                        <div>
+                            <dx-button icon="overflow"></dx-button>
+                        </div>
+
+                    </div>
 
                 </div>
             </div>
             <div class="card vh-100">
                 <div class="card-body">
+                    <div>
+                        <h3>Fields:</h3>
+                    </div>
                     <div class="task" [ngClass]="{'disabled': !item.draggable}" [draggable]="item.draggable"
                         (dragstart)="onDragStart(item)" (dragend)="onDragEnd($event)" *ngFor="let item of fields">
                         {{item.displayName}}
