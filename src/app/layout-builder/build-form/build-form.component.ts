@@ -544,7 +544,6 @@ export class BuildFormComponent {
   }
 
   openDeleteModal(clickEvent: any, layout: Categories) {
-    debugger;
     this.close();
     // clickEvent.preventDefault();
     // this.currentLayoutData.categoryName = layout.categoryName;
@@ -585,10 +584,21 @@ export class BuildFormComponent {
   }
 
   deleteLayout(layout: Categories) {
-    debugger;
+    //remove category from categories
     let id = layout.id;
     this.categories = this.categories.filter(x=> x.id !== id);
 
+    //Before removing category, push existing fields into fields table
+    let fieldsToPush = this.layoutArray.filter(field=> field.categoryId === id);
+    fieldsToPush.forEach(object => {
+      if(object.isField) {
+        this.updateFields(object.fields.objectId, object.fields.id);
+      };
+      
+    });
+
+    //remove all all connected fields from layout array
+    this.layoutArray = this.layoutArray.filter(field=> field.categoryId !== id);
 
     // Remove the layout's elementRef from its parent
     const elementRef = layout.elementRef;
