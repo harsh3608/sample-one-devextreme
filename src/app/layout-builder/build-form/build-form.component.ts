@@ -2,6 +2,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  OnInit,
   TemplateRef,
   ViewChild,
   ViewContainerRef,
@@ -27,14 +28,16 @@ import {
   Categories,
   editorType,
   EditorOptions,
+  ObjectList,
 } from '../shared/services/dev-data-grid.service';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-build-form',
   templateUrl: './build-form.component.html',
   styleUrls: ['./build-form.component.css'],
 })
-export class BuildFormComponent {
+export class BuildFormComponent implements OnInit {
   @ViewChild('componentBody') public componentBody!: ElementRef;
   @ViewChild('userMenu') userMenu!: TemplateRef<any>;
   @ViewChild('deleteMenu') deleteMenu!: TemplateRef<any>;
@@ -48,6 +51,16 @@ export class BuildFormComponent {
   items = [{ dataField: 'LayoutName' }];
   enteredValue: string = 'Default Layout';
   showObjectListPanel: boolean = false;
+  // currentObjectList: ObjectList = {
+  //   id: '',
+  //   elementRef: null,
+  //   isObjectList: true,
+  //   object: '123',
+  //   view: '10',
+  //   linkPointToPopup: true,
+  //   FriendlyName: 'select object'
+  // };
+  currentObjectList!: ObjectList;
 
   // @ViewChild('renameCustomText', { static: false }) renameCustomText!: ElementRef;
   // @HostListener('document:click', ['$event'])
@@ -101,8 +114,8 @@ export class BuildFormComponent {
       value: '60',
     },
   ];
-
-  booleans: string[] = ['Yes', 'No'];
+  ObjectListForm!: FormGroup
+  booleans: boolean[] = [true, false];
 
 
 
@@ -132,7 +145,19 @@ export class BuildFormComponent {
         validationOption: [],
         draggable: true,
       });
-      console.log(this.fields);
+    });
+  }
+
+  ngOnInit(): void {
+
+    this.ObjectListForm = new FormGroup({
+      id: new FormControl(),
+      elementRef: new FormControl(),
+      isObjectList: new FormControl(),
+      object: new FormControl(),
+      view: new FormControl(),
+      linkPointToPopup: new FormControl(),
+      friendlyName: new FormControl()
     });
   }
 
@@ -159,7 +184,7 @@ export class BuildFormComponent {
       type: 'number',
     },
   ];
-  layoutArray: Category[] = [];
+  layoutArray: any[] = [];
   isDragOver = false;
 
   onDrop(event: any, id: string, categoryName: string) {
@@ -563,22 +588,29 @@ export class BuildFormComponent {
     createLayoutDiv.ondragenter = (event) => this.onDragEnter(event);
     createLayoutDiv.ondragleave = (event) => this.onDragExit(event);
 
-    this.componentBody.nativeElement.appendChild(createLayoutDiv);
+    this.componentBody?.nativeElement.appendChild(createLayoutDiv);
     this.categories.push(category);
   }
 
   submit() {
+    console.log(this.layoutArray);
     this.groupAndOrganizeObjects(this.layoutArray);
   }
 
-  groupAndOrganizeObjects(layoutArray: Category[]) {
+  groupAndOrganizeObjects(layoutArray: any[]) {
     const groupedObjects: { [key: string]: Category[] } = {};
+    groupedObjects['ObjectList'] = [];
     layoutArray.forEach((obj) => {
       const { categoryId, categoryName, ...rest } = obj;
-      if (!groupedObjects[categoryId]) {
-        groupedObjects[categoryId] = [];
+
+      if (obj.isObjectList) {
+        groupedObjects['ObjectList'].push(obj);
+      } else {
+        if (!groupedObjects[categoryId]) {
+          groupedObjects[categoryId] = [];
+        }
+        groupedObjects[categoryId].push({ categoryId, categoryName, ...rest });
       }
-      groupedObjects[categoryId].push({ categoryId, categoryName, ...rest });
     });
     this.replaceKeysWithCategoryNames(groupedObjects);
     return groupedObjects;
@@ -770,9 +802,25 @@ export class BuildFormComponent {
     this.showObjectListPanel = true;
 
     let id = Guid.create().toString();
+
     const createLayoutDiv = document.createElement('div');
     createLayoutDiv.className = 'col-xl-12 card ';
     createLayoutDiv.style.height = 'max-content';
+
+    //pushing object list in layoutArray
+    let objectList: ObjectList = {
+      id: id,
+      elementRef: createLayoutDiv,
+      isObjectList: true,
+      object: undefined,
+      view: undefined,
+      linkPointToPopup: false,
+      FriendlyName: 'Select Object'
+    };
+    this.currentObjectList = objectList;
+    this.layoutArray.push(objectList);
+    createLayoutDiv.onclick = () => this.initializeObjectListForm(id);
+    this.initializeObjectListForm(id);
 
     //First Row
     const firstRow = document.createElement('div');
@@ -789,13 +837,14 @@ export class BuildFormComponent {
 
     const objectTitle = document.createElement('div');
     objectTitle.className = 'm-2';
-    head.innerHTML = 'Object Title';
+    head.innerHTML = this.currentObjectList?.FriendlyName;
     head.appendChild(objectTitle);
 
     const deleteButton = document.createElement('div');
+    deleteButton.className = 'mb-2'
     new dxButton(deleteButton, {
       icon: 'close',
-      // onClick: (event) => this.openDeleteModal(event, category),
+      onClick: (event) => this.deleteObjectList(event, objectList),
       type: 'normal',
       stylingMode: 'outlined',
     });
@@ -822,5 +871,77 @@ export class BuildFormComponent {
     createLayoutDiv.appendChild(fourthRow);
 
     this.componentBody.nativeElement.appendChild(createLayoutDiv);
+
+
+
   }
+
+  initializeObjectListForm(id: string) {
+    debugger;
+    this.ObjectListForm.reset();
+    this.showObjectListPanel = true;
+    let filteredObjectList = this.layoutArray.filter(x => x.id === id);
+    this.currentObjectList = filteredObjectList[0];
+    this.ObjectListForm.patchValue(this.currentObjectList);
+    console.log(this.ObjectListForm.value);
+
+  }
+
+  setObjectValues() {
+    debugger;
+    
+    if (this.ObjectListForm.get('object')?.value) {
+      //this.currentObjectList.FriendlyName = '45678955225782';
+      //this.currentObjectList.elementRef.children[0].children[0].children[0].innerHTML = (this.currentObjectList?.object.display);
+    }
+
+    let currentList = this.layoutArray.filter(x => x.id === this.currentObjectList.id);
+    currentList[0].id= this.ObjectListForm.get('id')?.value;
+    currentList[0].elementRef= this.ObjectListForm.get('elementRef')?.value;
+    currentList[0].isObjectList= this.ObjectListForm.get('isObjectList')?.value;
+    currentList[0].object = this.ObjectListForm.get('object')?.value;
+    currentList[0].view = this.ObjectListForm.get('view')?.value;
+    currentList[0].linkPointToPopup = this.ObjectListForm.get('linkPointToPopup')?.value;
+    currentList[0].friendlyName = this.ObjectListForm.get('friendlyName')?.value;
+
+    //this.currentObjectList = currentList[0];
+    this.layoutArray.forEach(element => {
+      if (element.id === currentList[0].id) {
+        element = currentList[0];
+      }
+    });
+    console.log(this.ObjectListForm.value);
+  }
+
+
+  deleteObjectList(event: any, objectList: ObjectList) {
+    //remove all all connected fields from layout array
+    this.layoutArray = this.layoutArray.filter(
+      (objectlist) => objectlist.id !== objectList.id
+    );
+
+    // Remove the layout's elementRef from its parent
+    const elementRef = objectList.elementRef;
+    const parentElement = elementRef?.parentElement;
+
+    if (parentElement) {
+      parentElement.removeChild(elementRef);
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -162,6 +162,16 @@ export interface Employee {
   ReportsTo: Number|null
 }
 
+export interface ObjectList {
+  id : string,
+  elementRef:HTMLDivElement , 
+  isObjectList: boolean,
+  object?: any,
+  view?: any,
+  linkPointToPopup: boolean,
+  FriendlyName: string
+}
+
 const employees: Employee[] = [{
   "EmployeeID": 1,
   "FullName": "Nancy Davolio",

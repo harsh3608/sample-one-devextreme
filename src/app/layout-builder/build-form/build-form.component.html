@@ -37,27 +37,31 @@
                     </div>
 
                     <div class="p-2 " *ngIf="showObjectListPanel" #renameCustomText>
-                        <h6>Custom Text:</h6>
-
-                        <div class="m-2 d-flex justify-content-between">
-                            <label>Object:</label>
-                            <dx-select-box [dataSource]="objects" displayExpr="display"
-                                valueExpr="value" placeholder="select object"></dx-select-box>
-                        </div>
-                        <div class="m-2 d-flex justify-content-between">
-                            <label>View:</label>
-                            <dx-select-box [dataSource]="views" displayExpr="display" valueExpr="value"></dx-select-box>
-                        </div>
-                        <div class="m-2 d-flex justify-content-between">
-                            <label>Links Point to Popup:</label>
-                            <dx-radio-group [items]="booleans"  layout="horizontal">
-                            </dx-radio-group>
-                        </div>
-                        <div class="m-2 d-flex justify-content-between">
-                            <label>Friendly Name:</label>
-                            <dx-text-box></dx-text-box>
-                        </div>
-
+                        <h6>Object List:</h6>
+                        <form [formGroup]="ObjectListForm">
+                            <div class="m-2 d-flex justify-content-between">
+                                <label>Object:</label>
+                                <dx-select-box [dataSource]="objects" displayExpr="display" 
+                                    placeholder="select object" (onValueChanged)="setObjectValues()"
+                                    formControlName="object" ></dx-select-box>
+                            </div>
+                            <div class="m-2 d-flex justify-content-between">
+                                <label>View:</label>
+                                <dx-select-box [dataSource]="views" displayExpr="display" 
+                                    (onValueChanged)="setObjectValues()" formControlName="view"></dx-select-box>
+                            </div>
+                            <div class="m-2 d-flex justify-content-between">
+                                <label>Links Point to Popup:</label>
+                                <dx-radio-group [items]="booleans" layout="horizontal"
+                                    (onValueChanged)="setObjectValues()" formControlName="linkPointToPopup">
+                                </dx-radio-group>
+                            </div>
+                            <div class="m-2 d-flex justify-content-between">
+                                <label>Friendly Name:</label>
+                                <dx-text-box (onValueChanged)="setObjectValues()"
+                                    formControlName="friendlyName"></dx-text-box>
+                            </div>
+                        </form>
                     </div>
 
                 </div>
