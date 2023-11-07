@@ -61,48 +61,48 @@ export class BuildFormComponent {
   //   }
   // }
   objects: any[] = [
-      {
-        display: 'Broker Issue - Statement Transaction',
-        value: '123',
-      },
-      {
-        display: 'Broker Issue - Transaction Failed',
-        value: '345',
-      },
-      {
-        display: 'Broker Issue - Account Transaction',
-        value: '678',
-      },
-    ];
+    {
+      display: 'Broker Issue - Statement Transaction',
+      value: '123',
+    },
+    {
+      display: 'Broker Issue - Transaction Failed',
+      value: '345',
+    },
+    {
+      display: 'Broker Issue - Account Transaction',
+      value: '678',
+    },
+  ];
 
   views: any[] = [
-      {
-        display: 'Active Broker Issues',
-        value: '10',
-      },
-      {
-        display: 'Active Broker Issues FT',
-        value: '20',
-      },
-      {
-        display: 'Active Broker Issues ST',
-        value: '30',
-      },
-      {
-        display: 'All Broker Issue',
-        value: '40',
-      },
-      {
-        display: 'All Broker Issue with Deleted',
-        value: '50',
-      },
-      {
-        display: 'Broker Issue - Account Transaction',
-        value: '60',
-      },
-    ];
+    {
+      display: 'Active Broker Issues',
+      value: '10',
+    },
+    {
+      display: 'Active Broker Issues FT',
+      value: '20',
+    },
+    {
+      display: 'Active Broker Issues ST',
+      value: '30',
+    },
+    {
+      display: 'All Broker Issue',
+      value: '40',
+    },
+    {
+      display: 'All Broker Issue with Deleted',
+      value: '50',
+    },
+    {
+      display: 'Broker Issue - Account Transaction',
+      value: '60',
+    },
+  ];
 
-    booleans: string[] = ['Yes', 'No'];
+  booleans: string[] = ['Yes', 'No'];
 
 
 
@@ -471,23 +471,28 @@ export class BuildFormComponent {
   onDragStart(item: any) {
     console.log('onDragStart');
     this.currentItem = item;
+    this.showObjectListPanel = false;
   }
   onDragEnd(event: any) {
     console.log('onDragEnd');
     this.isDragOver = false;
     this.currentItem = {} as Fields;
+    this.showObjectListPanel = false;
   }
   onDragOverList(event: any) {
     event.preventDefault();
+    this.showObjectListPanel = false;
   }
   onDragEnter(event: any) {
     // sessionStorage.setItem('src-element',JSON.stringify(event.srcElement));
     // console.log((event));
 
     this.isDragOver = true;
+    this.showObjectListPanel = false;
   }
   onDragExit(event: any) {
     this.isDragOver = false;
+    this.showObjectListPanel = false;
   }
 
   InsertObject(list: any[], objectToInsert: any, indexToInsert: string) {
@@ -498,6 +503,7 @@ export class BuildFormComponent {
   }
 
   createCategory() {
+    this.showObjectListPanel = false;
     let id = Guid.create().toString();
 
     const createLayoutDiv = document.createElement('div');
@@ -763,26 +769,53 @@ export class BuildFormComponent {
   addObjectList() {
     this.showObjectListPanel = true;
 
-    // let id = Guid.create().toString();
+    let id = Guid.create().toString();
     const createLayoutDiv = document.createElement('div');
     createLayoutDiv.className = 'col-xl-12 card ';
     createLayoutDiv.style.height = 'max-content';
 
+    //First Row
     const firstRow = document.createElement('div');
     firstRow.className = 'col-xl-12 card p-1 ';
     firstRow.style.height = '50px';
     createLayoutDiv.appendChild(firstRow);
+    //Object Row
+    const objectRow = document.createElement('div');
+    objectRow.className = ' card  ';
+    objectRow.style.height = '50px';
+    objectRow.style.width = 'max-content';
+    const head = document.createElement('div');
+    head.className = 'd-flex flex-row justify-content-between p-2 mb-1';
 
+    const objectTitle = document.createElement('div');
+    objectTitle.className = 'm-2';
+    head.innerHTML = 'Object Title';
+    head.appendChild(objectTitle);
+
+    const deleteButton = document.createElement('div');
+    new dxButton(deleteButton, {
+      icon: 'close',
+      // onClick: (event) => this.openDeleteModal(event, category),
+      type: 'normal',
+      stylingMode: 'outlined',
+    });
+    head.appendChild(deleteButton);
+    objectRow.appendChild(head);
+    firstRow.appendChild(objectRow);
+
+    // Second Row
     const secondRow = document.createElement('div');
     secondRow.className = 'col-xl-12 card p-1';
     secondRow.style.height = '50px';
     createLayoutDiv.appendChild(secondRow);
 
+    // Third Row
     const thirdRow = document.createElement('div');
     thirdRow.className = 'col-xl-12  card p-1';
     thirdRow.style.height = '50px';
     createLayoutDiv.appendChild(thirdRow);
 
+    // Fourth Row
     const fourthRow = document.createElement('div');
     fourthRow.className = 'col-xl-12  card p-1';
     fourthRow.style.height = '50px';
