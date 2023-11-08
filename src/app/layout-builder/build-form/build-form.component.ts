@@ -909,7 +909,7 @@ export class BuildFormComponent implements OnInit {
       }
     });
     debugger;
-    if (this.ObjectListForm.get('object')?.value.display) {
+    if (this.ObjectListForm.get('object')?.value.display || this.ObjectListForm.get('friendlyName')?.value) {
       this.ChangeObjectDisplayName(currentList[0]);
     }
     console.log(this.ObjectListForm.value);
@@ -925,10 +925,12 @@ export class BuildFormComponent implements OnInit {
 
     const objectTitle = document.createElement('div');
     objectTitle.className = 'm-2';
-
-    head.innerHTML = (objectList.friendlyName) ? objectList.friendlyName : objectList.object.display;
-
-
+    if (objectList.friendlyName || objectList.object.display) {
+      head.innerHTML = (objectList.friendlyName) ? objectList.friendlyName : objectList.object.display;
+     } else {
+      head.innerHTML = 'Select Object 1';
+    }
+    
     head.appendChild(objectTitle);
 
     const deleteButton = document.createElement('div');
