@@ -169,7 +169,7 @@ export interface ObjectList {
   object?: any,
   view?: any,
   linkPointToPopup: boolean,
-  FriendlyName: string
+  friendlyName: string
 }
 
 const employees: Employee[] = [{
